@@ -8,6 +8,8 @@ import com.ktdsuniversity.edu.todo.vo.TodoVO;
 
 public class TodoController {
 //입력만 받아서 서비스에게 던져
+	
+	//12312
 	public static void main(String[] args) {
 		
 		TodoService service = new TodoService();
