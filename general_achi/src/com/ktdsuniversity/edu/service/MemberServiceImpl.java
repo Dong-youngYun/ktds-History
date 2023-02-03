@@ -8,7 +8,7 @@ import com.ktdsuniversity.edu.vo.MemberVO;
 
 public class MemberServiceImpl implements MemberService {
 	
-	private MemberDAO memberDAO;
+	private MemberDAO memberDAO; 
 	
 	public MemberServiceImpl() {
 		memberDAO = new MapMemberDAOImpl(); //인터페이스만 적어줘 memberDAO
@@ -22,6 +22,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<MemberVO> readAll() {
 		return memberDAO.readAll();
+	}
+
+	@Override
+	public MemberVO read(int idx) { //서비스는 둘다 구현이 되어있어야 된다. new MapMemberDAOImpl이 바뀔수 있어서 List로
+		return memberDAO.read(idx);
+	}
+
+	@Override
+	public MemberVO read(String key) {
+		return memberDAO.read(key);
 	}
 
 }

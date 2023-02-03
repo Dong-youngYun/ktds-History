@@ -42,8 +42,18 @@ public class MemberController {
 			System.out.println(eachMember.getPageNumber());
 		}
 		
-//		MemberVO oneMember = service.read(?); 과제
 		
+		
+		MemberVO oneMember = service.read(1);
+		System.out.println(oneMember.getId());
+		System.out.println(oneMember.getPassword());
+		System.out.println(oneMember.getReadNumber());
+		System.out.println(oneMember.getPageNumber());
+//		DAO interface 부터 시작
+//		List는 index / Map은 key
+//		Method Overloading을 알아야 된다
+//		똑같은 메소드명이지만 파라미터의 타입과 갯수만 다르면 에러발생x
+//		String.valueof 참고
 		
 	}
 	

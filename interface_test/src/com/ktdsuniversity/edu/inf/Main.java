@@ -1,7 +1,7 @@
 package com.ktdsuniversity.edu.inf;
 
 public class Main {
-	//calculator 객체를 가져와서 계산 파라미터가 온 경우
+	//calculator 객체를 가져와서 계산 /파라미터가 온 경우
 	public static void calculate(Calculator calculator) {
 		System.out.println(calculator);
 		if (calculator instanceof CalculatorNomalImpl) { //calculator 노말임플이냐고 물어보는것 이것만 해줘 강제 
