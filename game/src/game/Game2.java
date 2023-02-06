@@ -11,7 +11,7 @@ public class Game2 {
 		Scanner scan = new Scanner(System.in);
 
 		List<String> wordList = new ArrayList<>();
-		String startLetter = "";
+		String startLetter = ""; //원래 처음 단어가 없기도 하고 시작단어를 입력하세요 출력
 
 		System.out.println("끝말잇기 시작");
 		while (true) {

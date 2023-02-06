@@ -14,7 +14,7 @@ public class Recursive { //재귀호출 /위험부담이 커 /자기가 자기�
 		File [] fileList = file.listFiles();//파일 타입의 배열에 담아줘
 		
 		for (File file2 : fileList) { //foreach crtl space
-			System.out.println(file2.getAbsolutePath());
+			System.out.println(file2.getAbsolutePath()); //파일 경로
 			if (file2.isDirectory()) { //반복중인 개체가 폴더라면 보여줘
 				readFile(file2); // 폴더 밑의 하위 파일들을 보여줘
 				
