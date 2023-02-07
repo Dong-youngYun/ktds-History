@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BaseballStream1 {
@@ -117,7 +118,7 @@ public class BaseballStream1 {
 				System.out.println(allStarVO);
 			});
 		
-		//game num이 0이 아닌 것 추출 해서 출력
+		//1.game num이 0이 아닌 것 추출 해서 출력
 		List<AllStarFullVO> notNum = list.stream()
 										 .filter( (vo3) -> vo3.getGameNum()!=0 )
 										 .collect(Collectors.toList());
@@ -127,7 +128,7 @@ public class BaseballStream1 {
 			System.out.println(vo3.getGameNum());
 		});
 		
-		// game num이 0인 것 추출해서 출력
+		//2. game num이 0인 것 추출해서 출력
 		List<AllStarFullVO> gameNum0 = list.stream()
 										   .filter( (vo4) -> vo4.getGameNum()==0 )
 										   .collect(Collectors.toList());
@@ -136,13 +137,13 @@ public class BaseballStream1 {
 			System.out.println(vo4.getGameNum());
 		});
 		
-		//1950년대 선수 출력
+		//3.1950년대 선수 출력
 		list.stream()
 			.filter((allStarVO) -> allStarVO.getYear().startsWith("195"))
 			.map((allStarVO) -> allStarVO.getPlayerID())
 			.forEach((System.out::println));
 		
-		//2000년대 BOS 팀의 선수 이름을 중복제거한 후 출력하세요.
+		//4. 2000년대 BOS 팀의 선수 이름을 중복제거한 후 출력하세요.
 		list.stream()
 			.filter((allStarVO) -> allStarVO.getYear().startsWith("200"))
 			.filter((allStarVO) -> allStarVO.getTeamID().equals("BOS"))
@@ -150,7 +151,7 @@ public class BaseballStream1 {
 			.distinct()
 			.forEach((System.out::println)); 
 		
-		//1937년 DET 팀의 선수 중 첫번째 선수 이름을 출력하세요.
+		//5. 1937년 DET 팀의 선수 중 첫번째 선수 이름을 출력하세요.
 		AllStarFullVO ad = list.stream() //첫번째 것만 가지고 온거니까 list가 아니야
 			.filter((allStarVO) -> allStarVO.getYear().equals("1937"))
 			.filter((allStarVO) -> allStarVO.getTeamID().equals("DET"))
@@ -158,7 +159,7 @@ public class BaseballStream1 {
 			.orElse(new AllStarFullVO());
 		System.out.println(ad.getPlayerID());
 		
-		//GP 1, startingPos 가 3인 선수의 이름을 출력하세요.
+		//6. GP 1, startingPos 가 3인 선수의 이름을 출력하세요.
 		list.stream()
 			.filter(allStarVO -> allStarVO.getGp() ==1)
 			.filter(allStarVO -> allStarVO.getStartingPos() ==3)
@@ -166,20 +167,20 @@ public class BaseballStream1 {
 				System.out.println(allStarVO.getPlayerID());
 			});
 				
-		//BOS팀에 있는 선수는 총 몇명인가요?
+		//7.BOS팀에 있는 선수는 총 몇명인가요?
 		long team = list.stream()
 			.filter(allStarVO -> allStarVO.getTeamID().equals("BOS"))
 			.count(); // count가 최종 long 타입 리턴
 		System.out.println(team);
 		
-		//이름이 foxx로 시작하는 선수의 플레이 연도를 중복 제거한 후 출력하세요.
+		//8.이름이 foxx로 시작하는 선수의 플레이 연도를 중복 제거한 후 출력하세요.
 		list.stream()
 			.filter(allStarVO -> allStarVO.getPlayerID().startsWith("foxx"))
 			.map(allStarVO -> allStarVO.getYear())
 			.distinct()
 			.forEach(System.out::println);
 		
-		//lombaer01 선수는 몇년도에 어느팀에서 플레이 했나요?
+		//9.lombaer01 선수는 몇년도에 어느팀에서 플레이 했나요?
 		list.stream()
 			.filter(allStarVO -> allStarVO.getPlayerID().equals("lombaer01"))
 			.forEach(allStarVO -> {
@@ -192,46 +193,60 @@ public class BaseballStream1 {
 			.map((allStarVO) -> allStarVO.getYear() + " > " + allStarVO.getTeamID())
 			.forEach(System.out::println);
 		
-		//muncyma01 선수의 year, startingPos와 teamID 를 출력하세요.
+		//10.muncyma01 선수의 year, startingPos와 teamID 를 출력하세요.
 		list.stream()
 			.filter(allStarVO -> allStarVO.getPlayerID().equals("muncyma01"))
 			.map(allStarVO -> allStarVO.getYear() + allStarVO.getStartingPos() + allStarVO.getTeamID())
 			.forEach(System.out::println);
-		//2015년에 hernafe02 선수는 몇번 출전 했나요?
+		//11.2015년에 hernafe02 선수는 몇번 출전 했나요?
 		long s =list.stream()
 			.filter(allStarVO -> allStarVO.getYear().equals("2015"))
 			.filter(allStarVO -> allStarVO.getPlayerID().equals("hernafe02"))
 			.count();
 		System.out.println(s);
 		
-		//ATL 팀이 몇년도에 경기에 출전했나요?
+		//12.ATL 팀이 몇년도에 경기에 출전했나요?
 		list.stream()
 			.filter(allStarVO -> allStarVO.getTeamID().equals("ATL"))
 			.map(allStarVO -> allStarVO.getYear())
 			.forEach(System.out::println);
 		
-		//W 로 시작하는 팀은 몇년도에 경기에 출전했나요?
+		//13.W 로 시작하는 팀은 몇년도에 경기에 출전했나요?
 		list.stream()
 			.filter(allStarVO -> allStarVO.getGameID().startsWith("W"))
 			.map(allStarVO -> allStarVO.getYear())
 			.distinct()
 			.forEach(System.out::println);
-		//GP와 startingPos가 모두 0인 선수 중 PHA 팀에 소속했던 선수는 누구인가요?
+		//14.GP와 startingPos가 모두 0인 선수 중 PHA 팀에 소속했던 선수는 누구인가요?
 		list.stream()
 			.filter(allStarVO-> allStarVO.getGp()==0)
 			.filter(allStarVO-> allStarVO.getStartingPos()==0)
-			.filter(allStarVO -> allStarVO.getTeamID("PHA"))
+			.filter(allStarVO -> allStarVO.getTeamID().equals("PHA"))
 			.map(allStarVO -> allStarVO.getPlayerID())
 			.forEach(System.out::println);
+		//15.playerID의 자리수가 8자리인 선수의 활동연도를 중복제거하여 출력하세요.
+		list.stream()
+			.filter(allStarVO -> allStarVO.getPlayerID().length() == 8)
+			.map(allStarVO -> allStarVO.getTeamID())
+			.distinct()
+			.forEach(System.out::println);
 		
-		//playerID의 값이 02 또는 03으로 끝나는 선수의 팀코드를 중복제거 하고 정렬하여 출력하세요.
-			list.stream()
-				.filter(allStarVO -> allStarVO.getPlayerID().endsWith("02")|| allStarVO.getPlayerID().endsWith("03") + allStarVO.getPlayerID().endsWith("02")|| allStarVO.getPlayerID().endsWith("03"))
-				.map(allStarVO-> allStarVO.getTeamID())
-				.distinct()
-				.sorted()
-				.forEach(System.out::println);
-		//lgID의 값이 AL, GameID는 60으로 끝나며 소속팀은 DET, playerID f로 시작하는 첫번쨰 선수의 playerID를 출력하고 만약 존재하지 않는다면 없음을 출력하세요.
+		//16.playerID의 값이 02 또는 03으로 끝나는 선수의 팀코드를 중복제거 하고 정렬하여 출력하세요.
+		list.stream()
+			.filter(allStarVO -> allStarVO.getPlayerID().endsWith("02")|| allStarVO.getPlayerID().endsWith("03"))
+			.map(allStarVO-> allStarVO.getTeamID())
+			.distinct()
+			.sorted()
+			.forEach(System.out::println);
+		//17.lgID의 값이 AL, GameID는 60으로 끝나며 소속팀은 DET, playerID f로 시작하는 첫번쨰 선수의 playerID를 출력하고 만약 존재하지 않는다면 없음을 출력하세요.
+		Optional<String> as = list.stream()
+								  .filter(allStarVO -> allStarVO.getLgID().equals("AL"))
+								  .filter(allStarVO -> allStarVO.getGameID().endsWith("60"))
+								  .filter(allStarVO -> allStarVO.getTeamID().equals("DET"))
+								  .filter(allStarVO -> allStarVO.getPlayerID().startsWith("f"))
+								  .map(allStarVO -> allStarVO.getPlayerID())
+								  .findFirst();
+		System.out.println(as.orElse("없음"));
 		
 		
 			
