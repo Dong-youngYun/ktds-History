@@ -15,7 +15,7 @@ public class BaseballStream1 {
 					.stream()
 					.skip(1) // 읽어들인 것에서 첫번째 라인은 건너뛰어라
 //					.peek(System.out::println) // 에러 발생시 문제되는 곳을 임시로 확인하려고 peak /data가 방대해서 디버깅으로 보기힘들어
-					.map( (line) -> { //string을 받아서 형태를 바꿔줄거야 ,기준으로 잘라
+					.map( (line) -> { //stream을 받아서 형태를 바꿔줄거야 ,기준으로 잘라
 						String[] strArr = line.split(","); //stream을 완성하기 전까진 계속 빨간줄
 						AllStarFullVO vo =new AllStarFullVO();
 						vo.setPlayerID(strArr[0]);
@@ -58,7 +58,7 @@ public class BaseballStream1 {
 		AllStarFullVO vo = list.stream()
 							   .filter( (vo1) -> vo1.getYear().equals("1933") )
 							   .findFirst()// 최종함수 첫번째거 가져와/ 데이터가 있을수도 없을수도 있으니까 optional
-							   .orElse(new AllStarFullVO()); // 데이터가 없으면 (null) new AllStarFullVO()를 리턴해라  optional의 메소드
+							   .orElse(new AllStarFullVO()); // 데이터가 없으면 (null값이면) new AllStarFullVO()를 리턴해라  optional의 메소드 /없으면 nullpointerexception 발생
 		System.out.println(vo.getPlayerID());
 		
 		//연도에 관계없이 playerID가 f로 시작하는 모든 데이터 출력
@@ -111,7 +111,7 @@ public class BaseballStream1 {
 		list.stream()
 			.filter((allStarVO) -> allStarVO.getStartingPos() == 4) //crtl z 반대는 crtl y / alt 좌우는 직전 편집 영역으로/ 단어 선택 crtl +K 같은 글자 다음영역 crtl + shift +k 이전영역
 			.map((allStarVO) -> allStarVO.getPlayerID()) //맵을 위에 쓰면 타입이 String이 되는데 getStartingPos은 int다 or /String인 id만 가져와서 pos가 없어
-			.distinct()
+			.distinct()//distinct sorted는 map이 필요
 			.sorted()
 			.forEach((allStarVO) -> {
 				System.out.println(allStarVO);
@@ -157,6 +157,84 @@ public class BaseballStream1 {
 			.findFirst()
 			.orElse(new AllStarFullVO());
 		System.out.println(ad.getPlayerID());
+		
+		//GP 1, startingPos 가 3인 선수의 이름을 출력하세요.
+		list.stream()
+			.filter(allStarVO -> allStarVO.getGp() ==1)
+			.filter(allStarVO -> allStarVO.getStartingPos() ==3)
+			.forEach(allStarVO -> {
+				System.out.println(allStarVO.getPlayerID());
+			});
+				
+		//BOS팀에 있는 선수는 총 몇명인가요?
+		long team = list.stream()
+			.filter(allStarVO -> allStarVO.getTeamID().equals("BOS"))
+			.count(); // count가 최종 long 타입 리턴
+		System.out.println(team);
+		
+		//이름이 foxx로 시작하는 선수의 플레이 연도를 중복 제거한 후 출력하세요.
+		list.stream()
+			.filter(allStarVO -> allStarVO.getPlayerID().startsWith("foxx"))
+			.map(allStarVO -> allStarVO.getYear())
+			.distinct()
+			.forEach(System.out::println);
+		
+		//lombaer01 선수는 몇년도에 어느팀에서 플레이 했나요?
+		list.stream()
+			.filter(allStarVO -> allStarVO.getPlayerID().equals("lombaer01"))
+			.forEach(allStarVO -> {
+				System.out.println(allStarVO.getYear());
+				System.out.println(allStarVO.getTeamID());
+			});
+		
+		list.stream()
+			.filter((allStarVO) -> allStarVO.getPlayerID().equals("lombaer01"))
+			.map((allStarVO) -> allStarVO.getYear() + " > " + allStarVO.getTeamID())
+			.forEach(System.out::println);
+		
+		//muncyma01 선수의 year, startingPos와 teamID 를 출력하세요.
+		list.stream()
+			.filter(allStarVO -> allStarVO.getPlayerID().equals("muncyma01"))
+			.map(allStarVO -> allStarVO.getYear() + allStarVO.getStartingPos() + allStarVO.getTeamID())
+			.forEach(System.out::println);
+		//2015년에 hernafe02 선수는 몇번 출전 했나요?
+		long s =list.stream()
+			.filter(allStarVO -> allStarVO.getYear().equals("2015"))
+			.filter(allStarVO -> allStarVO.getPlayerID().equals("hernafe02"))
+			.count();
+		System.out.println(s);
+		
+		//ATL 팀이 몇년도에 경기에 출전했나요?
+		list.stream()
+			.filter(allStarVO -> allStarVO.getTeamID().equals("ATL"))
+			.map(allStarVO -> allStarVO.getYear())
+			.forEach(System.out::println);
+		
+		//W 로 시작하는 팀은 몇년도에 경기에 출전했나요?
+		list.stream()
+			.filter(allStarVO -> allStarVO.getGameID().startsWith("W"))
+			.map(allStarVO -> allStarVO.getYear())
+			.distinct()
+			.forEach(System.out::println);
+		//GP와 startingPos가 모두 0인 선수 중 PHA 팀에 소속했던 선수는 누구인가요?
+		list.stream()
+			.filter(allStarVO-> allStarVO.getGp()==0)
+			.filter(allStarVO-> allStarVO.getStartingPos()==0)
+			.filter(allStarVO -> allStarVO.getTeamID("PHA"))
+			.map(allStarVO -> allStarVO.getPlayerID())
+			.forEach(System.out::println);
+		
+		//playerID의 값이 02 또는 03으로 끝나는 선수의 팀코드를 중복제거 하고 정렬하여 출력하세요.
+			list.stream()
+				.filter(allStarVO -> allStarVO.getPlayerID().endsWith("02")|| allStarVO.getPlayerID().endsWith("03") + allStarVO.getPlayerID().endsWith("02")|| allStarVO.getPlayerID().endsWith("03"))
+				.map(allStarVO-> allStarVO.getTeamID())
+				.distinct()
+				.sorted()
+				.forEach(System.out::println);
+		//lgID의 값이 AL, GameID는 60으로 끝나며 소속팀은 DET, playerID f로 시작하는 첫번쨰 선수의 playerID를 출력하고 만약 존재하지 않는다면 없음을 출력하세요.
+		
+		
+			
 		
 		
 //		List<AllStarFullVO> vo2 =list.stream()
