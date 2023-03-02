@@ -16,7 +16,6 @@ public class NullPointerExceptionTest {
 		else if (nameLength == 4) {
 			return "선우용녀";
 		}
-		
 		return null;
 	}
 	//NullPointerException을 피하기 위해 공통된 메소드를 만들어서 회피
