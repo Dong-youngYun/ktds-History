@@ -1,6 +1,7 @@
 package com.ktdsuniversity.edu.cafe.menu.mgnt.controller;
 
 public class MenuMgntController {
+	
 	public void printMenu() {
 		System.out.println("\n============================\r\n"
 				+ "1. 등록\r\n"
