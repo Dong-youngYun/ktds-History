@@ -138,4 +138,15 @@ public class ArticleDAOImpl extends AbstractDaoPoolSupport<ArticleVO> implements
 		return null;
 	}
 
+	@Override
+	public int deleteArticle(ArticleVO articleVO) {
+		StringBuffer query = new StringBuffer();
+		query.append(" DELETE                                 ");
+		query.append("   FROM ARTICLE                         ");
+		query.append("  WHERE ARTICLE_NO = ? ");
+		return insert(query.toString(), (ad) -> {
+			ad.setString(1, articleVO.getArticleNo());
+		});
+	}
+
 }

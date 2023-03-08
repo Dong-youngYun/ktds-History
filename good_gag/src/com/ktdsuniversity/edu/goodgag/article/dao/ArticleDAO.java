@@ -24,4 +24,6 @@ public interface ArticleDAO {
      */
 	public List<ArticleVO> getAllArticles();
 	
+	public int deleteArticle(ArticleVO articleVO);
+	
 }
