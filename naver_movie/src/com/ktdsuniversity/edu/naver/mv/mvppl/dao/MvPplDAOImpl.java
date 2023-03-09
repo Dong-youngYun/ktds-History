@@ -46,7 +46,18 @@ public class MvPplDAOImpl extends AbstractDaoPoolSupport<MvPplVO> implements MvP
 
 	@Override
 	public int updateMvPpl(MvPplVO mvPplVO) {
-		return 0;
+		StringBuffer query = new StringBuffer();
+		query.append(" UPDATE MV_PPL             ");
+		query.append("    SET PRFL_PCTR = ? ");
+		query.append("      , NM = ? ");
+		query.append("      , RL_NM = ? ");
+		query.append("  WHERE MV_PPL_ID = ?      ");
+		return super.update(query.toString(), (pstmt) -> {
+			pstmt.setString(1, mvPplVO.getPrflPctr());
+			pstmt.setString(2, mvPplVO.getNm());
+			pstmt.setString(3, mvPplVO.getRlNm());
+			pstmt.setString(4, mvPplVO.getMvPplId());
+		});
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class GnrServiceImpl implements GnrService {
 
 	@Override
 	public boolean updateGnr(GnrVO gnrVO) {
-		return false;
+		return gnrDAO.updateGnr(gnrVO) > 0;
 	}
 
 	@Override

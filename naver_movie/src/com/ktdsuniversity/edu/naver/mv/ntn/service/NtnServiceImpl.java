@@ -27,7 +27,7 @@ public class NtnServiceImpl implements NtnService {
 
 	@Override
 	public boolean updateNtn(NtnVO ntnVO) {
-		return false;
+		return ntnDAO.updateNtn(ntnVO) > 0;
 	}
 
 	@Override

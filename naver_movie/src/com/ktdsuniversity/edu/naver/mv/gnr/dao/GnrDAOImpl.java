@@ -30,7 +30,14 @@ public class GnrDAOImpl extends AbstractDaoPoolSupport<GnrVO> implements GnrDAO 
 
 	@Override
 	public int updateGnr(GnrVO gnrVO) {
-		return 0;
+		StringBuffer query = new StringBuffer();
+		query.append(" UPDATE GNR             ");
+		query.append("    SET GNR_NM = ? ");
+		query.append("  WHERE GNR_ID = ?      ");
+		return super.update(query.toString(), (pstmt) -> {
+			pstmt.setString(1, gnrVO.getGnrNm());
+			pstmt.setInt(2, gnrVO.getGnrId());
+		});
 	}
 
 	@Override

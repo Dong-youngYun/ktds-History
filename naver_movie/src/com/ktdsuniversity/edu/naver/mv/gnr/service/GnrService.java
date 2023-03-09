@@ -25,6 +25,7 @@ public interface GnrService {
 	 * @return 변경의 결과
 	 */
 	public boolean updateGnr(GnrVO gnrVO); 
+	 
 	
 	/**
 	 * GNR 테이블에 등록된 장르데이터를 삭제한다.

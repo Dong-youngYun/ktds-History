@@ -29,7 +29,14 @@ public class NtnDAOImpl extends AbstractDaoPoolSupport<NtnVO> implements NtnDAO 
 
 	@Override
 	public int updateNtn(NtnVO ntnVO) {
-		return 0;
+		StringBuffer query = new StringBuffer();
+		query.append(" UPDATE NTN             ");
+		query.append("    SET NTN_NM = ? ");
+		query.append("  WHERE NTN_ID = ?      ");
+		return super.update(query.toString(), (pstmt) -> {
+			pstmt.setString(1, ntnVO.getNtnNm());
+			pstmt.setInt(2, ntnVO.getNtnId());
+		});
 	}
 
 	@Override

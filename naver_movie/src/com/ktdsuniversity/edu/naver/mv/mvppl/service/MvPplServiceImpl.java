@@ -28,7 +28,7 @@ public class MvPplServiceImpl implements MvPplService {
 
 	@Override
 	public boolean updateMvPpl(MvPplVO mvPplVO) {
-		return false;
+		return mvPplDAO.updateMvPpl(mvPplVO) > 0;
 	}
 
 	@Override

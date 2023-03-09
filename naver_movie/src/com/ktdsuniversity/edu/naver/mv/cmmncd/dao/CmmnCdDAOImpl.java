@@ -12,11 +12,12 @@ public class CmmnCdDAOImpl extends AbstractDaoPoolSupport<CmmnCdVO> implements C
 		StringBuffer query = new StringBuffer(); 
 		query.append(" INSERT INTO CMMN_CD ");
 		query.append("  (CD_ID             ");
-		query.append(" , CD_NM)            ");
+		query.append(" , CD_NM            ");
+		query.append(" , PRCDNC_CD_ID)            ");
 		query.append(" VALUES              ");
-		query.append("  (?/*CD_ID*/        ");
+		query.append("  (? /*CD_ID*/        ");
 		query.append(" , ? /*CD_NM*/      ");
-		query.append(" , ? /*PRCDNC_CD_NM*/)      ");
+		query.append(" , ? /*PRCDNC_CD_ID*/)      ");
 		
 		return super.insert(query.toString(), (pstmt) -> {
 			pstmt.setString(1, cmmnCdVO.getCdId());

@@ -6,6 +6,7 @@ import com.ktdsuniversity.edu.naver.mv.cmpn.vo.CmpnVO;
 
 public interface CmpnService {
 
+
 	public boolean createCmpn(CmpnVO cmpnVO);
 	
 	public List<CmpnVO> readAllCmpn();

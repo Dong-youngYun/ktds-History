@@ -27,7 +27,7 @@ public class CmpnServiceImpl implements CmpnService {
 
 	@Override
 	public boolean updateCmpn(CmpnVO cmpnVO) {
-		return false;
+		return cmpnDAO.updateCmpn(cmpnVO) > 0;
 	}
 
 	@Override

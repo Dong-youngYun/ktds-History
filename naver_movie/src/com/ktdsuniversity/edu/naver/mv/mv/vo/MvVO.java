@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ktdsuniversity.edu.naver.mv.cmpn.vo.CmpnVO;
 import com.ktdsuniversity.edu.naver.mv.gnr.vo.GnrVO;
+import com.ktdsuniversity.edu.naver.mv.mv.vo.PrdcPrtcptnCmpnVO;
 import com.ktdsuniversity.edu.naver.mv.mvppl.vo.MvPplVO;
 import com.ktdsuniversity.edu.naver.mv.ntn.vo.NtnVO;
 
@@ -22,8 +23,8 @@ public class MvVO {
 	//여러개가 들어와서 list로 표현
 	private List<GnrVO> gnrList;
 	private List<NtnVO> ntnList;
-	private List<CmpnVO> cmpnList;
-	private List<MvPplVO> mvPplList;
+	private List<PrdcPrtcptnCmpnVO> cmpnList;
+	private List<PrdcPrtcptnPplVO> mvPplList;
 	
 	public String getMvId() {
 		return mvId;
@@ -91,16 +92,16 @@ public class MvVO {
 	public void setNtnList(List<NtnVO> ntnList) {
 		this.ntnList = ntnList;
 	}
-	public List<CmpnVO> getCmpnList() {
+	public List<PrdcPrtcptnCmpnVO> getCmpnList() {
 		return cmpnList;
 	}
-	public void setCmpnList(List<CmpnVO> cmpnList) {
+	public void setCmpnList(List<PrdcPrtcptnCmpnVO> cmpnList) {
 		this.cmpnList = cmpnList;
 	}
-	public List<MvPplVO> getMvPplList() {
+	public List<PrdcPrtcptnPplVO> getMvPplList() {
 		return mvPplList;
 	}
-	public void setMvPplList(List<MvPplVO> mvPplList) {
+	public void setMvPplList(List<PrdcPrtcptnPplVO> mvPplList) {
 		this.mvPplList = mvPplList;
 	}
 	

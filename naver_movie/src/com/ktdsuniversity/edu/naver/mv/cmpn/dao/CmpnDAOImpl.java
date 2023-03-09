@@ -40,7 +40,14 @@ public class CmpnDAOImpl extends AbstractDaoPoolSupport<CmpnVO> implements CmpnD
 
 	@Override
 	public int updateCmpn(CmpnVO cmpnVO) {
-		return 0;
+		StringBuffer query = new StringBuffer();
+		query.append(" UPDATE CMPN             ");
+		query.append("    SET CMPN_NM = ? ");
+		query.append("  WHERE CMPN_ID = ?      ");
+		return super.update(query.toString(), (pstmt) -> {
+			pstmt.setString(1, cmpnVO.getCmpnNm());
+			pstmt.setString(2, cmpnVO.getCmpnId());
+		});
 	}
 
 	@Override
