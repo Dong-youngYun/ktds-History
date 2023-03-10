@@ -22,7 +22,7 @@ public class GnrServiceImpl implements GnrService {
 
 	@Override
 	public List<GnrVO> readAllGnr() {
-		return null;
+		return gnrDAO.readAllGnr();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class GnrServiceImpl implements GnrService {
 
 	@Override
 	public boolean deleteGnr(int gnrId) {
-		return false;
+		return gnrDAO.deleteGnr(gnrId) > 0;
 	}
 
 }

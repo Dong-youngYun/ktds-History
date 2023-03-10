@@ -1,21 +1,33 @@
 package com.ktdsuniversity.edu.naver.mv.fmsln.vo;
 
-public class FmsLnVO {
+import com.ktdsuniversity.edu.naver.mv.util.db.Column;
+import com.ktdsuniversity.edu.naver.mv.util.db.UseColumn;
 
+@UseColumn
+public class FmsLnVO {
+	
+	@Column("FMS_LN_ID")
 	public String fmsLnId;
 	
+	@Column("MV_ID")
 	public String mvId;
 	
+	@Column("MV_PPL")
 	public String mvPpl;
 	
+	@Column("FMS_LN")
 	public String fmsLn;
 	
+	@Column("XPLNTN")
 	public String xplntn;
 	
+	@Column("RGST_TM")
 	public String rgstTm;
 	
+	@Column("RGST_PPL_NM")
 	public String rgstPplNm;
 	
+	@Column("RCMMND_CNT")
 	public int rcmmndCnt;
 
 	public String getFmsLnId() {

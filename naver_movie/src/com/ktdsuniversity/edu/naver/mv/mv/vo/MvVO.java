@@ -2,26 +2,46 @@ package com.ktdsuniversity.edu.naver.mv.mv.vo;
 
 import java.util.List;
 
-import com.ktdsuniversity.edu.naver.mv.cmpn.vo.CmpnVO;
 import com.ktdsuniversity.edu.naver.mv.gnr.vo.GnrVO;
-import com.ktdsuniversity.edu.naver.mv.mv.vo.PrdcPrtcptnCmpnVO;
-import com.ktdsuniversity.edu.naver.mv.mvppl.vo.MvPplVO;
 import com.ktdsuniversity.edu.naver.mv.ntn.vo.NtnVO;
+import com.ktdsuniversity.edu.naver.mv.util.db.Column;
+import com.ktdsuniversity.edu.naver.mv.util.db.UseColumn;
 
+@UseColumn(keyColum = "MV_ID", keyVarName = "mvId", keyType = String.class)
 public class MvVO {
-
+	
+	@Column(value = "MV_ID", isRequire = true)
 	private String mvId;
+	
+	@Column("MV_TTL")
 	private String mvTtl;
+	
+	@Column("ENG_TTL")
 	private String engTtl;
+	
+	@Column("SCRN_STT")
 	private String scrnStt;
+	
+	@Column("SCRN_TM")
 	private int scrnTm;
+	
+	@Column("OPNG_DT")
 	private String opngDt;
+	
+	@Column("GRD")
 	private String grd;
+	
+	@Column("PSTR")
 	private String pstr;
+	
+	@Column("SMR")
 	private String smr;
 	
 	//여러개가 들어와서 list로 표현
+	@Column(cls = GnrVO.class)
 	private List<GnrVO> gnrList;
+	
+	@Column(cls = NtnVO.class)
 	private List<NtnVO> ntnList;
 	private List<PrdcPrtcptnCmpnVO> cmpnList;
 	private List<PrdcPrtcptnPplVO> mvPplList;

@@ -2,10 +2,11 @@ package com.ktdsuniversity.edu.naver.mv.fmsln.dao;
 
 import java.util.List;
 
+import com.ktdsuniversity.edu.naver.mv.cmpn.vo.CmpnVO;
 import com.ktdsuniversity.edu.naver.mv.fmsln.vo.FmsLnVO;
-import com.ktdsuniversity.edu.naver.mv.util.db.AbstractDaoPoolSupport;
+import com.ktdsuniversity.edu.naver.mv.util.db.AbstractAutoDaoPoolSupport;
 
-public class FmsLnDAOImpl extends AbstractDaoPoolSupport<FmsLnVO> implements FmsLnDAO {
+public class FmsLnDAOImpl extends AbstractAutoDaoPoolSupport<FmsLnVO> implements FmsLnDAO {
 
 	@Override
 	public int createFmsLn(FmsLnVO fmsLnVO) {
@@ -39,7 +40,17 @@ public class FmsLnDAOImpl extends AbstractDaoPoolSupport<FmsLnVO> implements Fms
 
 	@Override
 	public List<FmsLnVO> readAllFmsLn() {
-		return null;
+		StringBuffer query = new StringBuffer();
+		query.append(" SELECT FMS_LN_ID  ");
+	    query.append("      , MV_ID  ");
+	    query.append("      , MV_PPL  ");
+	    query.append("      , FMS_LN  ");
+	    query.append("      , XPLNTN  ");
+	    query.append("      , RGST_TM  ");
+	    query.append("      , RGST_PPL_NM  ");
+	    query.append("      , RCMMND_CNT  ");
+	    query.append("   FROM FMS_LN     ");
+		return super.select(query.toString(), null, FmsLnVO.class);  
 	}
 
 	@Override
@@ -67,7 +78,13 @@ public class FmsLnDAOImpl extends AbstractDaoPoolSupport<FmsLnVO> implements Fms
 
 	@Override
 	public int deleteFmsLn(String fmsLnId) {
-		return 0;
+		StringBuffer query = new StringBuffer();
+		query.append(" DELETE             ");
+		query.append("   FROM FMS_LN ");
+		query.append("  WHERE FMS_LN_ID = ?      ");
+		return super.delete(query.toString(), (pstmt) -> {
+			pstmt.setString(1, fmsLnId);
+		});
 	}
 
 }

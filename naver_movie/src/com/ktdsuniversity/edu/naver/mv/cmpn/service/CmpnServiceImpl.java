@@ -22,7 +22,7 @@ public class CmpnServiceImpl implements CmpnService {
 
 	@Override
 	public List<CmpnVO> readAllCmpn() {
-		return null;
+		return cmpnDAO.readAllCmpn();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class CmpnServiceImpl implements CmpnService {
 
 	@Override
 	public boolean deleteCmpn(String cmpnId) {
-		return false;
+		return cmpnDAO.deleteCmpn(cmpnId) > 0;
 	}
 
 	

@@ -3,9 +3,9 @@ package com.ktdsuniversity.edu.naver.mv.rtng.dao;
 import java.util.List;
 
 import com.ktdsuniversity.edu.naver.mv.rtng.vo.RtngVO;
-import com.ktdsuniversity.edu.naver.mv.util.db.AbstractDaoPoolSupport;
+import com.ktdsuniversity.edu.naver.mv.util.db.AbstractAutoDaoPoolSupport;
 
-public class RtngDAOImpl extends AbstractDaoPoolSupport<RtngVO> implements RtngDAO {
+public class RtngDAOImpl extends AbstractAutoDaoPoolSupport<RtngVO> implements RtngDAO {
 
 	@Override
 	public int createRtng(RtngVO rtngVO) {
@@ -39,7 +39,17 @@ public class RtngDAOImpl extends AbstractDaoPoolSupport<RtngVO> implements RtngD
 
 	@Override
 	public List<RtngVO> readAllRtng() {
-		return null;
+		StringBuffer query = new StringBuffer();
+		query.append(" SELECT RTNG_ID     ");
+	    query.append("  	, MV_ID      ");
+	    query.append("  	, RTNG    ");
+	    query.append("  	, RTNG_DTL   ");
+	    query.append("  	, RTNG_WRTR  ");
+	    query.append("  	, RTNG_WRT_TM ");
+	    query.append("  	, LK_CNT     ");
+	    query.append("  	, DSLK_CNT   ");
+	    query.append("   FROM RTNG        ");
+		return super.select(query.toString(), null, RtngVO.class);
 	}
 
 	@Override
@@ -67,7 +77,13 @@ public class RtngDAOImpl extends AbstractDaoPoolSupport<RtngVO> implements RtngD
 
 	@Override
 	public int deleteRtng(String rtngId) {
-		return 0;
+		StringBuffer query = new StringBuffer();
+		query.append(" DELETE             ");
+		query.append("   FROM RTNG ");
+		query.append("  WHERE RTNG_ID = ?      ");
+		return super.delete(query.toString(), (pstmt) -> {
+			pstmt.setString(1, rtngId);
+		});
 	}
 
 }

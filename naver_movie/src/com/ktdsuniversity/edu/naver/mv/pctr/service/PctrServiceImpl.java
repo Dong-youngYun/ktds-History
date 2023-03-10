@@ -22,7 +22,7 @@ public class PctrServiceImpl implements PctrService {
 
 	@Override
 	public List<PctrVO> readAllPctr() {
-		return null;
+		return pctrDAO.readAllPctr();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class PctrServiceImpl implements PctrService {
 
 	@Override
 	public boolean deletePctr(String pctrId) {
-		return false;
+		return pctrDAO.deletePctr(pctrId) > 0;
 	}
 
 }

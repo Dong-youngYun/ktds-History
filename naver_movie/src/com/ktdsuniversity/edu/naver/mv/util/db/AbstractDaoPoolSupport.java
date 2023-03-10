@@ -37,9 +37,9 @@ public abstract class AbstractDaoPoolSupport<T> {
 		}
 	}
 	
-	private Connection getConnection() {
+	protected Connection getConnection() {
 		if (connectionPool.size() == this.poolSize) {
-			throw new RuntimeException("모든 Conneciton이 사용 중입니다.");
+			throw new RuntimeException("모든 Connection이 사용 중입니다.");
 		}
 		
 		try {
@@ -51,7 +51,7 @@ public abstract class AbstractDaoPoolSupport<T> {
 		}
 	}
 	
-	private void closeAll(Connection conn, PreparedStatement pstmt, ResultSet rs) {
+	protected void closeAll(Connection conn, PreparedStatement pstmt, ResultSet rs) {
 		if (conn != null) {
 			try {
 				conn.close();
@@ -70,15 +70,15 @@ public abstract class AbstractDaoPoolSupport<T> {
 		}
 	}
 	
-	public int selectOneInt(String query, ParamMapper pm, ResultMapper<String> rm) {
-		String result = selectOneString(query, pm, rm);
+	public int selectOneInt(String query, ParamMapper pm) {
+		String result = selectOneString(query, pm);
 		if (result == null) {
 			return 0;
 		}
 		return Integer.parseInt(result);
 	}
 	
-	public String selectOneString(String query, ParamMapper pm, ResultMapper<String> rm) {
+	public String selectOneString(String query, ParamMapper pm) {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -92,7 +92,7 @@ public abstract class AbstractDaoPoolSupport<T> {
 			rs = pstmt.executeQuery();
 			String result = null;
 			if (rs.next()) {
-				result = rm.map(rs);
+				result = rs.getString(1);
 			}
 			return result;
 		}
@@ -178,7 +178,7 @@ public abstract class AbstractDaoPoolSupport<T> {
 		
 		return null;
 	}
-	//중복검사
+	
 	public T selectOneByKey(String query, String column, String getterName, ParamMapper pm, ResultKeyMapper<T> rm) {
 		Connection connection = null;
 		PreparedStatement pstmt = null;

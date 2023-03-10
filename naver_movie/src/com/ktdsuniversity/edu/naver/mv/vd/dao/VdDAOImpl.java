@@ -2,11 +2,10 @@ package com.ktdsuniversity.edu.naver.mv.vd.dao;
 
 import java.util.List;
 
-import com.ktdsuniversity.edu.naver.mv.rtng.vo.RtngVO;
-import com.ktdsuniversity.edu.naver.mv.util.db.AbstractDaoPoolSupport;
+import com.ktdsuniversity.edu.naver.mv.util.db.AbstractAutoDaoPoolSupport;
 import com.ktdsuniversity.edu.naver.mv.vd.vo.VdVO;
 
-public class VdDAOImpl extends AbstractDaoPoolSupport<VdVO> implements VdDAO {
+public class VdDAOImpl extends AbstractAutoDaoPoolSupport<VdVO> implements VdDAO {
 
 	@Override
 	public int createVd(VdVO vdVO) {
@@ -41,7 +40,17 @@ public class VdDAOImpl extends AbstractDaoPoolSupport<VdVO> implements VdDAO {
 
 	@Override
 	public List<VdVO> readAllVd() {
-		return null;
+		StringBuffer query = new StringBuffer();
+		query.append(" SELECT VD_ID       ");
+	    query.append("  	 , MV_ID      ");
+	    query.append("  	 , VD_TP      ");
+	    query.append("  	 , VD_TTL     ");
+	    query.append("  	 , THMBNL     ");
+	    query.append("  	 , VD_PLY_CNT ");
+	    query.append("  	 , VD_URL     ");
+	    query.append("  	 , RGST_DT    ");
+	    query.append("   FROM VD          ");
+		return super.select(query.toString(), null, VdVO.class);
 	}
 
 	@Override
@@ -68,7 +77,13 @@ public class VdDAOImpl extends AbstractDaoPoolSupport<VdVO> implements VdDAO {
 
 	@Override
 	public int deleteVd(String vdId) {
-		return 0;
+		StringBuffer query = new StringBuffer();
+		query.append(" DELETE             ");
+		query.append("   FROM VD ");
+		query.append("  WHERE VD_ID = ?      ");
+		return super.delete(query.toString(), (pstmt) -> {
+			pstmt.setString(1, vdId);
+		});
 	}
 
 }

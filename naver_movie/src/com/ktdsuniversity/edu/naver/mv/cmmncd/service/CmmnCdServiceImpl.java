@@ -22,7 +22,7 @@ public class CmmnCdServiceImpl implements CmmnCdService {
 
 	@Override
 	public List<CmmnCdVO> readAllCmmnCd() {
-		return null;
+		return cmmnCdDAO.readAllCmmnCd();
 	}
 
 	@Override

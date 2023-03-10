@@ -2,10 +2,11 @@ package com.ktdsuniversity.edu.naver.mv.gnr.dao;
 
 import java.util.List;
 
+import com.ktdsuniversity.edu.naver.mv.cmpn.vo.CmpnVO;
 import com.ktdsuniversity.edu.naver.mv.gnr.vo.GnrVO;
-import com.ktdsuniversity.edu.naver.mv.util.db.AbstractDaoPoolSupport;
+import com.ktdsuniversity.edu.naver.mv.util.db.AbstractAutoDaoPoolSupport;
 
-public class GnrDAOImpl extends AbstractDaoPoolSupport<GnrVO> implements GnrDAO {
+public class GnrDAOImpl extends AbstractAutoDaoPoolSupport<GnrVO> implements GnrDAO {
 
 	@Override
 	public int createGnr(GnrVO gnrVO) {
@@ -25,7 +26,11 @@ public class GnrDAOImpl extends AbstractDaoPoolSupport<GnrVO> implements GnrDAO 
 
 	@Override
 	public List<GnrVO> readAllGnr() {
-		return null;
+		StringBuffer query = new StringBuffer();
+		query.append(" SELECT GNR_ID  ");
+	    query.append("      , GNR_NM  ");
+	    query.append("   FROM GNR     ");
+		return super.select(query.toString(), null, GnrVO.class);    
 	}
 
 	@Override
@@ -42,7 +47,13 @@ public class GnrDAOImpl extends AbstractDaoPoolSupport<GnrVO> implements GnrDAO 
 
 	@Override
 	public int deleteGnr(int gnrId) {
-		return 0;
+		StringBuffer query = new StringBuffer();
+		query.append(" DELETE             ");
+		query.append("   FROM GNR ");
+		query.append("  WHERE GNR_ID = ?      ");
+		return super.delete(query.toString(), (pstmt) -> {
+			pstmt.setInt(1, gnrId);
+		});
 	}
 
 }

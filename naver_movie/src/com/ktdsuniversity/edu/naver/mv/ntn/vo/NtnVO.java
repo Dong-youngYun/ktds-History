@@ -1,9 +1,15 @@
 package com.ktdsuniversity.edu.naver.mv.ntn.vo;
 
-public class NtnVO {
+import com.ktdsuniversity.edu.naver.mv.util.db.Column;
+import com.ktdsuniversity.edu.naver.mv.util.db.UseColumn;
 
+@UseColumn
+public class NtnVO {
+	
+	@Column("NTN_ID")
 	public int ntnId;
 	
+	@Column("NTN_NM")
 	public String ntnNm;
 
 	public int getNtnId() {

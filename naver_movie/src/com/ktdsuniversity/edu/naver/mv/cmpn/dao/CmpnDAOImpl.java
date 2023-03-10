@@ -3,18 +3,16 @@ package com.ktdsuniversity.edu.naver.mv.cmpn.dao;
 import java.util.List;
 
 import com.ktdsuniversity.edu.naver.mv.cmpn.vo.CmpnVO;
-import com.ktdsuniversity.edu.naver.mv.util.db.AbstractDaoPoolSupport;
+import com.ktdsuniversity.edu.naver.mv.util.db.AbstractAutoDaoPoolSupport;
 
-public class CmpnDAOImpl extends AbstractDaoPoolSupport<CmpnVO> implements CmpnDAO {
+public class CmpnDAOImpl extends AbstractAutoDaoPoolSupport<CmpnVO> implements CmpnDAO {
 	
 	@Override
 	public String createNewCmpnId() {
 		StringBuffer query = new StringBuffer();
 		query.append(" SELECT 'CO-' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(SEQ_CMPN_PK.NEXTVAL, 5, '0') NEW_SEQ ");
 		query.append("   FROM DUAL ");
-		return selectOneString(query.toString(), null, (rt) -> {
-			return rt.getString("NEW_SEQ");
-		});
+		return selectOneString(query.toString(), null);
 	}
 
 	@Override
@@ -35,7 +33,11 @@ public class CmpnDAOImpl extends AbstractDaoPoolSupport<CmpnVO> implements CmpnD
 
 	@Override
 	public List<CmpnVO> readAllCmpn() {
-		return null;
+		StringBuffer query = new StringBuffer();
+		query.append(" SELECT CMPN_ID  ");
+	    query.append("      , CMPN_NM  ");
+	    query.append("   FROM CMPN     ");
+		return super.select(query.toString(), null, CmpnVO.class);                   
 	}
 
 	@Override
@@ -52,7 +54,13 @@ public class CmpnDAOImpl extends AbstractDaoPoolSupport<CmpnVO> implements CmpnD
 
 	@Override
 	public int deleteCmpn(String cmpnId) {
-		return 0;
+		StringBuffer query = new StringBuffer();
+		query.append(" DELETE             ");
+		query.append("   FROM CMPN ");
+		query.append("  WHERE CMPN_ID = ?      ");
+		return super.delete(query.toString(), (pstmt) -> {
+			pstmt.setString(1, cmpnId);
+		});
 	}
 
 

@@ -3,9 +3,9 @@ package com.ktdsuniversity.edu.naver.mv.cmmncd.dao;
 import java.util.List;
 
 import com.ktdsuniversity.edu.naver.mv.cmmncd.vo.CmmnCdVO;
-import com.ktdsuniversity.edu.naver.mv.util.db.AbstractDaoPoolSupport;
+import com.ktdsuniversity.edu.naver.mv.util.db.AbstractAutoDaoPoolSupport;
 
-public class CmmnCdDAOImpl extends AbstractDaoPoolSupport<CmmnCdVO> implements CmmnCdDAO {
+public class CmmnCdDAOImpl extends AbstractAutoDaoPoolSupport<CmmnCdVO> implements CmmnCdDAO {
 
 	@Override
 	public int createCmmnCd(CmmnCdVO cmmnCdVO) {
@@ -28,7 +28,12 @@ public class CmmnCdDAOImpl extends AbstractDaoPoolSupport<CmmnCdVO> implements C
 
 	@Override
 	public List<CmmnCdVO> readAllCmmnCd() {
-		return null;
+		StringBuffer query = new StringBuffer();
+		query.append(" SELECT CD_ID        ");
+	    query.append("      , CD_NM        ");
+	    query.append("      , PRCDNC_CD_ID "); 
+	    query.append("   FROM CMMN_CD      ");
+		return super.select(query.toString(), null, CmmnCdVO.class); // 리턴 타입 맞춰서 CmmnCdVO / 바인딩할 ? 가 없어서 null               
 	}
 
 	@Override

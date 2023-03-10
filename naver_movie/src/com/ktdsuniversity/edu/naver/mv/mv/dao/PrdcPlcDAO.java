@@ -11,4 +11,6 @@ public interface PrdcPlcDAO {
 	 */
 	public int createPrdcPlc(MvVO mvVO);
 	
+	public int deletePrdcPlc(String mvId);
+	
 }

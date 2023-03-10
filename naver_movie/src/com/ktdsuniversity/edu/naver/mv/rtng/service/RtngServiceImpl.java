@@ -22,7 +22,7 @@ public class RtngServiceImpl implements RtngService {
 
 	@Override
 	public List<RtngVO> readAllRtng() {
-		return null;
+		return rtngDAO.readAllRtng();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class RtngServiceImpl implements RtngService {
 
 	@Override
 	public boolean deleteRtng(String rtngId) {
-		return false;
+		return rtngDAO.deleteRtng(rtngId) > 0;
 	}
 
 }

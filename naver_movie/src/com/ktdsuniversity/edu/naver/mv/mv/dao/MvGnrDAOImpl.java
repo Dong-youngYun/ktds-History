@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.ktdsuniversity.edu.naver.mv.gnr.vo.GnrVO;
 import com.ktdsuniversity.edu.naver.mv.mv.vo.MvVO;
-import com.ktdsuniversity.edu.naver.mv.util.db.AbstractDaoPoolSupport;
+import com.ktdsuniversity.edu.naver.mv.util.db.AbstractAutoDaoPoolSupport;
 
-public class MvGnrDAOImpl extends AbstractDaoPoolSupport<GnrVO> implements MvGnrDAO {
+public class MvGnrDAOImpl extends AbstractAutoDaoPoolSupport<GnrVO> implements MvGnrDAO {
 
 	@Override
 	public int createMvGnr(MvVO mvVO) { //모든 정보를 가진 MvVO 사용
@@ -30,6 +30,18 @@ public class MvGnrDAOImpl extends AbstractDaoPoolSupport<GnrVO> implements MvGnr
 		}
 		
 		return insertCount;
+	}
+
+	@Override
+	public int deleteMvGnr(String mvId) {
+		StringBuffer query = new StringBuffer();
+		query.append(" DELETE           ");
+		query.append("   FROM MV_GNR    ");
+		query.append("  WHERE MV_ID = ? ");
+		
+		return super.delete(query.toString(), (pstmt) -> {
+			pstmt.setString(1, mvId);
+		});
 	}
 
 }

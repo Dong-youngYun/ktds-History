@@ -1,14 +1,20 @@
 package com.ktdsuniversity.edu.naver.mv.gnr.vo;
 
+import com.ktdsuniversity.edu.naver.mv.util.db.Column;
+import com.ktdsuniversity.edu.naver.mv.util.db.UseColumn;
+
+@UseColumn
 public class GnrVO {
 
 	/**
 	 * 장르아이디
 	 */
+	@Column("GNR_ID")
 	private int gnrId;
 	/**
 	 * 장르명
 	 */
+	@Column("GNR_NM")
 	private String gnrNm;
 	
 	/**

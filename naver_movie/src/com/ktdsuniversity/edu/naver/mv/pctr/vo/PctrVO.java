@@ -1,17 +1,26 @@
 package com.ktdsuniversity.edu.naver.mv.pctr.vo;
 
-public class PctrVO {
+import com.ktdsuniversity.edu.naver.mv.util.db.Column;
+import com.ktdsuniversity.edu.naver.mv.util.db.UseColumn;
 
+@UseColumn
+public class PctrVO {
+	
+	@Column("PCTR_ID")
 	public String pctrId;
 	
+	@Column("MV_ID")
 	public String mvId;
 	
+	@Column("TP")
 	public String tp;
 	
+	@Column("THMBNL_PCTR")
 	public String thmbnlPctr;
 	
+	@Column("ORGN_PCTR")
 	public String orgnPctr;
-
+	
 	public String getPctrId() {
 		return pctrId;
 	}

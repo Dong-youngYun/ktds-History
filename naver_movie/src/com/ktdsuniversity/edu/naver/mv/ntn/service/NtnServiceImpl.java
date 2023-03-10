@@ -22,7 +22,7 @@ public class NtnServiceImpl implements NtnService {
 
 	@Override
 	public List<NtnVO> readAllNtn() {
-		return null;
+		return ntnDAO.readAllNtn();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class NtnServiceImpl implements NtnService {
 
 	@Override
 	public boolean deleteNtn(int NtnId) {
-		return false;
+		return ntnDAO.deleteNtn(NtnId) > 0;
 	}
 
 

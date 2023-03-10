@@ -1,13 +1,21 @@
 package com.ktdsuniversity.edu.naver.mv.mvppl.vo;
 
-public class MvPplVO {
+import com.ktdsuniversity.edu.naver.mv.util.db.Column;
+import com.ktdsuniversity.edu.naver.mv.util.db.UseColumn;
 
+@UseColumn
+public class MvPplVO {
+	
+	@Column("MV_PPL_ID")
 	public String mvPplId;
 	
+	@Column("PRFL_PCTR")
 	public String prflPctr;
 	
+	@Column("NM")
 	public String nm;
 	
+	@Column("RL_NM")
 	public String rlNm;
 
 	public String getMvPplId() {

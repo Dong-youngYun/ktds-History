@@ -22,7 +22,7 @@ public class VdServiceImpl implements VdService {
 
 	@Override
 	public List<VdVO> readAllVd() {
-		return null;
+		return vdDAO.readAllVd();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class VdServiceImpl implements VdService {
 
 	@Override
 	public boolean deleteVd(String vdId) {
-		return false;
+		return vdDAO.deleteVd(vdId) > 0;
 	}
 
 }

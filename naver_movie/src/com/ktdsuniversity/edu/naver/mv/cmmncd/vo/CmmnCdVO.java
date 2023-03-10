@@ -1,11 +1,18 @@
 package com.ktdsuniversity.edu.naver.mv.cmmncd.vo;
 
+import com.ktdsuniversity.edu.naver.mv.util.db.Column;
+import com.ktdsuniversity.edu.naver.mv.util.db.UseColumn;
+
+@UseColumn
 public class CmmnCdVO {
 
+	@Column("CD_ID")
 	public String cdId;
 	
+	@Column("CD_NM")
 	public String cdNm;
 	
+	@Column("PRCDNC_CD_ID")
 	public String prcdncCdId;
 
 	public String getCdId() {

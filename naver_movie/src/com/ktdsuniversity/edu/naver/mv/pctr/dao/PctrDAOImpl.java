@@ -3,9 +3,9 @@ package com.ktdsuniversity.edu.naver.mv.pctr.dao;
 import java.util.List;
 
 import com.ktdsuniversity.edu.naver.mv.pctr.vo.PctrVO;
-import com.ktdsuniversity.edu.naver.mv.util.db.AbstractDaoPoolSupport;
+import com.ktdsuniversity.edu.naver.mv.util.db.AbstractAutoDaoPoolSupport;
 
-public class PctrDAOImpl extends AbstractDaoPoolSupport<PctrVO> implements PctrDAO {
+public class PctrDAOImpl extends AbstractAutoDaoPoolSupport<PctrVO> implements PctrDAO {
 
 	@Override
 	public int createPctr(PctrVO pctrVO) {
@@ -34,7 +34,14 @@ public class PctrDAOImpl extends AbstractDaoPoolSupport<PctrVO> implements PctrD
 
 	@Override
 	public List<PctrVO> readAllPctr() {
-		return null;
+		StringBuffer query = new StringBuffer();
+		query.append(" SELECT PCTR_ID     ");
+	    query.append("      , MV_ID       ");
+	    query.append("      , TP          ");
+	    query.append("      , THMBNL_PCTR ");
+	    query.append("      , ORGN_PCTR   ");
+	    query.append("   FROM PCTR        ");
+	    return super.select(query.toString(), null, PctrVO.class);
 	}
 
 	@Override
@@ -57,7 +64,13 @@ public class PctrDAOImpl extends AbstractDaoPoolSupport<PctrVO> implements PctrD
 
 	@Override
 	public int deletePctr(String pctrId) {
-		return 0;
+		StringBuffer query = new StringBuffer();
+		query.append(" DELETE             ");
+		query.append("   FROM PCTR ");
+		query.append("  WHERE PCTR_ID = ?      ");
+		return super.delete(query.toString(), (pstmt) -> {
+			pstmt.setString(1, pctrId);
+		});
 	}
 
 }

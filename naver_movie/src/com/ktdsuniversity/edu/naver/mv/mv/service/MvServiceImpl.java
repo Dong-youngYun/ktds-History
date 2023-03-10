@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.naver.mv.mv.service;
 
+import java.util.List;
+
 import com.ktdsuniversity.edu.naver.mv.mv.dao.MvDAO;
 import com.ktdsuniversity.edu.naver.mv.mv.dao.MvDAOImpl;
 import com.ktdsuniversity.edu.naver.mv.mv.dao.MvGnrDAO;
@@ -62,5 +64,62 @@ public class MvServiceImpl implements MvService {
 		
 		return false;
 	}
+
+	@Override
+	public List<MvVO> readAllMv() {
+		return mvDAO.readAllMv();
+	}
+	
+	@Override
+	public MvVO readOneMv(String mvId) {
+		return mvDAO.readOneMv(mvId);
+	}
+	
+	@Override
+	public boolean updateMv(MvVO mvVO) { //뭐가 수정됬는지 몰라서 삭제후 추가
+		
+		// 1. 영화 수정
+		int updateCount = mvDAO.updateMv(mvVO);
+		// 2. 영화_장르 삭제
+		updateCount += mvGnrDAO.deleteMvGnr(mvVO.getMvId());
+		// 3. 영화_장르 추가
+		updateCount += mvGnrDAO.createMvGnr(mvVO);
+		// 4. 제작지 삭제
+		updateCount += prdcPlcDAO.deletePrdcPlc(mvVO.getMvId());
+		// 5. 제작지 추가
+		updateCount += prdcPlcDAO.createPrdcPlc(mvVO);
+		// 6. 참여회사 삭제
+		updateCount += prdcPrtcptnCmpnDAO.deletePrdcPrtcptnCmpn(mvVO.getMvId());
+		// 7. 참여회사 추가
+		updateCount += prdcPrtcptnCmpnDAO.createPrdcPrtcptnCmpn(mvVO);
+		// 8. 참여인 삭제
+		updateCount += prdcPrtcptnPplDAO.deletePrdcPrtcptnPpl(mvVO.getMvId());
+		// 9. 참여인 추가
+		updateCount += prdcPrtcptnPplDAO.createPrdcPrtcptnPpl(mvVO);
+		return updateCount > 0;
+	}
+
+	
+	@Override
+	public boolean deleteMv(String mvId) {
+		// 1. 영화삭제
+		int deleteCount = mvDAO.deleteMv(mvId);
+		
+		// 2. 장르삭제
+		deleteCount += mvGnrDAO.deleteMvGnr(mvId);
+		
+		// 3. 제작지삭제
+		deleteCount += prdcPlcDAO.deletePrdcPlc(mvId);
+		
+		// 4. 참여회사삭제
+		deleteCount += prdcPrtcptnCmpnDAO.deletePrdcPrtcptnCmpn(mvId);
+		
+		// 5. 참여영화인 삭제
+		deleteCount += prdcPrtcptnPplDAO.deletePrdcPrtcptnPpl(mvId);
+		
+		return deleteCount > 0;
+	}
+
+
 
 }

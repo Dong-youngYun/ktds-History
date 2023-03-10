@@ -1,14 +1,20 @@
 package com.ktdsuniversity.edu.naver.mv.cmpn.vo;
 
+import com.ktdsuniversity.edu.naver.mv.util.db.Column;
+import com.ktdsuniversity.edu.naver.mv.util.db.UseColumn;
+
+@UseColumn
 public class CmpnVO {
 
 	/**
 	 * 회사아이디
 	 */
+	@Column("CMPN_ID")
 	public String cmpnId;
 	/**
 	 * 회사명
 	 */
+	@Column("CMPN_NM")
 	public String cmpnNm;
 
 	/**

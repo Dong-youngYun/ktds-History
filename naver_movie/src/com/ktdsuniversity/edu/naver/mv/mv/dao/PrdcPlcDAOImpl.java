@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.ktdsuniversity.edu.naver.mv.mv.vo.MvVO;
 import com.ktdsuniversity.edu.naver.mv.ntn.vo.NtnVO;
-import com.ktdsuniversity.edu.naver.mv.util.db.AbstractDaoPoolSupport;
+import com.ktdsuniversity.edu.naver.mv.util.db.AbstractAutoDaoPoolSupport;
 
-public class PrdcPlcDAOImpl extends AbstractDaoPoolSupport<NtnVO> implements PrdcPlcDAO {
+public class PrdcPlcDAOImpl extends AbstractAutoDaoPoolSupport<NtnVO> implements PrdcPlcDAO {
 
 	@Override
 	public int createPrdcPlc(MvVO mvVO) {
@@ -29,6 +29,19 @@ public class PrdcPlcDAOImpl extends AbstractDaoPoolSupport<NtnVO> implements Prd
 			});
 		}
 		return insertCount;
+	}
+
+	@Override
+	public int deletePrdcPlc(String mvId) {
+		StringBuffer query = new StringBuffer();
+		query.append(" DELETE           ");
+		query.append("   FROM PRDC_PLC    ");
+		query.append("  WHERE MV_ID = ? ");
+		
+		return super.delete(query.toString(), (pstmt) -> {
+			pstmt.setString(1, mvId);
+		});
+		
 	}
 
 }

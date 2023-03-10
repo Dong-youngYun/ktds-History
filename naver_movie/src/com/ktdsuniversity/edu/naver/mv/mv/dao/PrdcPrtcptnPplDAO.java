@@ -6,4 +6,5 @@ public interface PrdcPrtcptnPplDAO {
 
 	public int createPrdcPrtcptnPpl(MvVO mvVO);
 	
+	public int deletePrdcPrtcptnPpl(String mvId);
 }

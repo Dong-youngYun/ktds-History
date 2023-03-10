@@ -1,21 +1,33 @@
 package com.ktdsuniversity.edu.naver.mv.vd.vo;
 
+import com.ktdsuniversity.edu.naver.mv.util.db.Column;
+import com.ktdsuniversity.edu.naver.mv.util.db.UseColumn;
+
+@UseColumn
 public class VdVO {
 
+	@Column("VD_ID")
 	public String vdId;
 	
+	@Column("MV_ID")
 	public String mvId;
 	
+	@Column("VD_TP")
 	public String vdTp;
 	
+	@Column("VD_TTL")
 	public String vdTtl;
 	
+	@Column("THMBNL")
 	public String thmbnl;
 	
+	@Column("VD_PLY_CNT")
 	public int vdPlyCnt;
 	
+	@Column("VD_URL")
 	public String vdUrl;
 	
+	@Column("RGST_DT")
 	public String rgstDt;
 
 	public String getVdId() {

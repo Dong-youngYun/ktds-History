@@ -10,4 +10,6 @@ public interface PrdcPrtcptnCmpnDAO {
 	 * @return
 	 */
 	public int createPrdcPrtcptnCmpn(MvVO mvVO);
+	
+	public int deletePrdcPrtcptnCmpn(String mvId);
 }

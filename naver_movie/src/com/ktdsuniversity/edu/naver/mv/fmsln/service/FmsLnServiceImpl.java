@@ -22,7 +22,7 @@ public class FmsLnServiceImpl implements FmsLnService {
 
 	@Override
 	public List<FmsLnVO> readAllFmsLn() {
-		return null;
+		return fmsLnDAO.readAllFmsLn();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class FmsLnServiceImpl implements FmsLnService {
 
 	@Override
 	public boolean deleteFmsLn(String fmsLnId) {
-		return false;
+		return fmsLnDAO.deleteFmsLn(fmsLnId) > 0;
 	}
 
 }

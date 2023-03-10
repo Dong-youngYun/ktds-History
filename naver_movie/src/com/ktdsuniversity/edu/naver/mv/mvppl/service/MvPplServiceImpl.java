@@ -23,7 +23,7 @@ public class MvPplServiceImpl implements MvPplService {
 
 	@Override
 	public List<MvPplVO> readAllMvPpl() {
-		return null;
+		return mvPplDAO.readAllMvPpl();
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class MvPplServiceImpl implements MvPplService {
 
 	@Override
 	public boolean deleteMvPpl(String mvPplId) {
-		return false;
+		return mvPplDAO.deleteMvPpl(mvPplId) > 0;
 	}
 
 }
