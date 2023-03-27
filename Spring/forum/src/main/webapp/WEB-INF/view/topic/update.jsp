@@ -1,0 +1,37 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.6.4.min.js"></script>
+<script type="text/javascript">
+	$().ready(function() {
+	});
+</script>
+</head>
+<body>
+	
+	<form action="${pageContext.request.contextPath}/topic/update/${topic.id}" method="post">
+	
+		<div>
+			<label for="subject">제목</label>
+			<input type="text" name="subject" id="subject" value="${topic.subject}" placeholder="제목입력" />
+		</div>
+		<div>
+			<label for="email">이메일</label>
+			<input type="email" name="email" id="email" value="${topic.email}" placeholder="이메일" />
+		</div>
+		<div>
+			<label for="content">내용</label> <!-- 여러줄을 쓰는 경우 textarea  input은 한줄만 가능 -->
+			<textarea name="content" id="content" placeholder="내용">${topic.content}</textarea>
+		</div>
+		<div>
+			<input type="submit" value="수정" /> <!-- submit form의 내용을 전송해라 -->
+		</div>
+	</form>
+	
+</body>
+</html>
