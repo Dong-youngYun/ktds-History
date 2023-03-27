@@ -29,8 +29,6 @@ public class TopicController {
 	@Autowired
 	private TopicService topicService;
 	
-	@Autowired
-	private UploadHandler uploadHandler;
 	
 	@Value("${upload.path}") //설정정보를 읽어오는 경우
 	private String uploadPath;
@@ -46,8 +44,6 @@ public class TopicController {
 	public String viewTopicDetailPage(@PathVariable int topicId, Model model) { //파라미터 순서는 의미가 없다 Spring이 알아서 넣어준다.
 		//System.out.println("URL 변수 topicId의 값: " + topicId);
 		logger.info("URL 변수 topicId의 값: {}", topicId );
-		
-		Integer.parseInt("ABC");
 		
 		TopicVO topic = topicService.readOneTopicByTopicId(topicId);
 		model.addAttribute("topic", topic);
@@ -66,9 +62,9 @@ public class TopicController {
 		//write.jsp의 action을 따라와서 post타입의 메소드를 찾아서 작성한 것이다.
 	
 		
-		boolean createResult = topicService.createNewTopic(topicVO);
+		boolean createResult = topicService.createNewTopic(topicVO, uploadFile);
 		
-		uploadHandler.upload(uploadFile, topicVO.getId()); //호출 이후부터 알수 있어서 아래로 이동
+		//uploadHandler.upload(uploadFile, topicVO.getId()); //호출 이후부터 알수 있어서 아래로 이동
 		
 		if (!createResult) {
 			return "topic/write";

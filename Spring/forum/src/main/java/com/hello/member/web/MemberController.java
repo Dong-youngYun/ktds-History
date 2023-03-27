@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.hello.common.util.StringUtil;
 import com.hello.member.service.MemberService;
 import com.hello.member.vo.MemberVO;
 
@@ -68,9 +69,41 @@ public class MemberController {
 	// 파라미터를 받아오는 방법3
 	@PostMapping("/member/regist")
 	public String doMemberRegist(MemberVO memberVO) {
+
+		String email = memberVO.getEmail();
+		String name = memberVO.getName();
+		String password = memberVO.getPassword();
+		String passwordConfirm = memberVO.getPasswordConfirm();
+		
+		if (StringUtil.isEmpty(email)) {
+			throw new RuntimeException("email은 필수 값입니다.");
+		}
+		if (StringUtil.isEmpty(name)) {
+			throw new RuntimeException("name은 필수 값입니다.");
+		}
+		if (StringUtil.isEmpty(password)) {
+			throw new RuntimeException("password은 필수 값입니다.");
+		}
+		if (StringUtil.isEmpty(passwordConfirm)) {
+			throw new RuntimeException("passwordConfirm은 필수 값입니다.");
+		}
+		if (StringUtil.isExceedLength(email, 100)) {
+			throw new RuntimeException("email은 100글자까지 작성할 수 있습니다.");
+		}
+		if (StringUtil.isExceedLength(name, 10)) {
+			throw new RuntimeException("name은 10글자까지 작성할 수 있습니다.");
+		}
+		if (StringUtil.isExceedLength(password, 10)) {
+			throw new RuntimeException("password은 10글자까지 작성할 수 있습니다.");
+		}
+		if (StringUtil.isExceedLength(passwordConfirm, 10)) {
+			throw new RuntimeException("passwordConfirm은 10글자까지 작성할 수 있습니다.");
+		}
+		if (!StringUtil.isMatchTo(password, passwordConfirm)) {
+			throw new RuntimeException("password가 일치하지 않습니다.");
+		}
 		
 		boolean isSuccess = memberService.createNewMember(memberVO);
-		
 		//System.out.println("회원등록성공여부:" + isSuccess);
 		logger.debug("회원등록 성공여부: {} ", isSuccess);
 		
