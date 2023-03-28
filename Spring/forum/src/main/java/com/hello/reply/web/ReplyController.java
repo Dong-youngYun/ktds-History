@@ -5,7 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.hello.member.vo.MemberVO;
 import com.hello.reply.service.ReplyService;
 import com.hello.reply.vo.ReplyVO;
 
@@ -16,7 +18,10 @@ public class ReplyController {
 	private ReplyService replyService; //Impl같은 클래스가 들어오면 Spring의 장점인 유연성 확장성을 사용할 수 없다.
 	
 	@PostMapping("/topic/reply/create")
-	public String doCreateReply(ReplyVO replyVO) {
+	public String doCreateReply(ReplyVO replyVO,
+								@SessionAttribute("__USER_SESSION_DATA__") MemberVO memberVO) {
+		replyVO.setEmail(memberVO.getEmail());
+		
 		boolean createResult = replyService.createNewReply(replyVO);
 		if (createResult) {
 			return "redirect:/topic/" + replyVO.getTopicId();

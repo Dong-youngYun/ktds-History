@@ -14,10 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hello.common.handler.DownloadUtil;
-import com.hello.common.handler.UploadHandler;
+import com.hello.member.vo.MemberVO;
 import com.hello.topic.service.TopicService;
 import com.hello.topic.vo.TopicVO;
 
@@ -57,10 +58,13 @@ public class TopicController {
 	}
 	
 	@PostMapping("/topic/write") //PostMapping DB에 반영 // 컬렉션으로 받는다.
-	public String doTopicWrite(TopicVO topicVO, List<MultipartFile> uploadFile) {
+	public String doTopicWrite(TopicVO topicVO,
+							   List<MultipartFile> uploadFile,
+							   @SessionAttribute("__USER_SESSION_DATA__") MemberVO memberVO) {
 		//TopicVO에 MultipartFile을 넣을 수도 있지만 DB로 정보를 보내서 메모리 차지하게 된다. 그냥 파라미터로 MultipartFile을 작성해서 처리
 		//write.jsp의 action을 따라와서 post타입의 메소드를 찾아서 작성한 것이다.
 	
+		topicVO.setEmail(memberVO.getEmail());
 		
 		boolean createResult = topicService.createNewTopic(topicVO, uploadFile);
 		
@@ -91,7 +95,10 @@ public class TopicController {
 	}
 	
 	@PostMapping("/topic/update/{topicId}")
-	public String doTopicUpdate(@PathVariable int topicId, TopicVO topicVO) {
+	public String doTopicUpdate(@PathVariable int topicId, 
+								TopicVO topicVO,
+								@SessionAttribute("__USER_SESSION_DATA__") MemberVO memberVO) { //다른 컨트롤러에서 Session 받아오기
+		memberVO.setEmail(memberVO.getEmail());
 		topicVO.setId(topicId); //update.jsp에는 id에 대한 정보가 없어서 PostMapping의 url에서 넘어온 id정보를 TopicVO에 넣어준다.
 		boolean updateResult = topicService.updateOneTopic(topicVO);
 		

@@ -27,10 +27,6 @@
 			<input type="file" name="uploadFile" placeholder="파일을 선택하세요." />
 		</div>
 		<div>
-			<label for="email">이메일</label>
-			<input type="email" name="email" id="email" placeholder="이메일" />
-		</div>
-		<div>
 			<label for="content">내용</label> <!-- 여러줄을 쓰는 경우 textarea  input은 한줄만 가능 -->
 			<textarea name="content" id="content" placeholder="내용"></textarea>
 		</div>

@@ -15,6 +15,9 @@
 </head>
 <body>
 
+	<a href="${pageContext.request.contextPath}/member/logout">로그아웃</a>
+
+	<img src="${pageContext.request.contextPath}/img/temp/깃진스_누끼.png" style="width: 100px" height= "100px;" />
 	<img src="${pageContext.request.contextPath}/img/temp/깃진스_누끼.png" style="width: 100px" height= "100px;" />
 
 	<h1>Topics</h1>
