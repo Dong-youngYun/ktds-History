@@ -29,7 +29,13 @@
 					redirectURL: ""
 				} */
 				if (response.status == "200 OK") {
-					location.href = "${context}" + response.redirectURL;
+					if(response.redirectURL) {
+						location.href = "${context}" + response.redirectURL;
+					}
+				}
+				else if (response.status == "400") {
+					// 파라미터 전달을 하지 않은 경우
+					alert(response.message);
 				}
 				else {
 					alert(response.errorCode + " / " + response.message);
