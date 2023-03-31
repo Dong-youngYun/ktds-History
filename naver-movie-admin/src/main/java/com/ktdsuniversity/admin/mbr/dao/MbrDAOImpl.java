@@ -19,10 +19,40 @@ public class MbrDAOImpl extends SqlSessionDaoSupport implements MbrDAO {
 	}
 
 	@Override
+	public int readCountMbrById(String mbrId) {
+		return getSqlSession().selectOne("Mbr.readCountMbrById", mbrId);
+	}
+	
+	@Override
+	public String readSaltMbrById(String mbrId) {
+		return getSqlSession().selectOne("Mbr.readSaltMbrById", mbrId);
+	}
+	
+	@Override
+	public String readLgnBlockYnById(String mbrId) {
+		return getSqlSession().selectOne("Mbr.readLgnBlockYnById", mbrId);
+	}
+	
+	@Override
 	public MbrVO readOneMbrByIdAndPwd(MbrVO mbrVO) {
 		return getSqlSession().selectOne("Mbr.readOneMbrByIdAndPwd", mbrVO);
 	}
-
+	
+	@Override
+	public int updateMbrLgnSucc(MbrVO mbrVO) {
+		return getSqlSession().update("Mbr.updateMbrLgnSucc", mbrVO);
+	}
+	
+	@Override
+	public int updateMbrLgnFail(MbrVO mbrVO) {
+		return getSqlSession().update("Mbr.updateMbrLgnFail", mbrVO);
+	}
+	
+	@Override
+	public int updateMbrLgnBlock(MbrVO mbrVO) {
+		return getSqlSession().update("Mbr.updateMbrLgnBlock", mbrVO);
+	}
+	
 	@Override
 	public List<MbrVO> readAllAdminMbr() {
 		return getSqlSession().selectList("Mbr.readAllAdminMbr");
@@ -42,5 +72,16 @@ public class MbrDAOImpl extends SqlSessionDaoSupport implements MbrDAO {
 	public int deleteOneAdminMbr(String mbrId) {
 		return getSqlSession().update("Mbr.deleteOneAdminMbr", mbrId); //실무에서는 delete쿼리 안써서 update로 처리
 	}
+
+	
+
+	
+
+	
+
+	
+
+	
+
 	
 }

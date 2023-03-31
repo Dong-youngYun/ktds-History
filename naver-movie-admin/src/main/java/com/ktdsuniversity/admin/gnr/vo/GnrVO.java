@@ -5,44 +5,20 @@ package com.ktdsuniversity.admin.gnr.vo;
  */
 public class GnrVO {
 
-	/**
-	 * 
-	 */
 	private int gnrId;
 
-	/**
-	 * 
-	 */
 	private String gnrNm;
 
-	/**
-	 * 
-	 */
 	private String crtDt;
 
-	/**
-	 * 
-	 */
 	private String crtr;
 
-	/**
-	 * 
-	 */
 	private String mdfyDt;
 
-	/**
-	 * 
-	 */
 	private String mdfyr;
 
-	/**
-	 * 
-	 */
 	private String useYn;
 
-	/**
-	 * 
-	 */
 	private String delYn;
 
 

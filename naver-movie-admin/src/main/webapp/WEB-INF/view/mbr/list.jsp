@@ -76,9 +76,40 @@
 			});
 		})
 		
+		$("#mbrId").keyup(function() {
+			
+			var that = this;
+			var value = $(this).val()
+			value = $.trim(value);
+			
+			if (value == "") {
+				return;
+			}
+			else {
+				$.get("${context}/api/mbr/dup/" + value, function(response) {
+					if(response.status == "200 OK") {
+						$(that).css("backgroundColor", "#8bfc91"); <!-- keyup쪽 function을 that으로 가져온다. -->
+					}
+					
+					else if (response.status == "500") {
+						$(that).css("backgroundColor", "#F00C");	
+					}
+				});
+			}
+			
+		});
+		
 		$("#save_btn").click(function() {
 			
 			if ( $("#isModify").val() == "false") {
+				
+				var bgColor = $("#mbrId").css("backgroundColor");
+				
+				if (bgColor != "rgb(139, 252, 145)") {
+					alert("이미 사용중인 ID 입니다.");
+					return;
+				} 
+				
 				//신규등록
 				$.post("${context}/api/mbr/create", $("#detail_form").serialize(), function(response) {
 					if (response.status == "200 OK") {
