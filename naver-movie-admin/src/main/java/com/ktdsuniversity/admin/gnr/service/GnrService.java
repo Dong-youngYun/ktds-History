@@ -6,11 +6,13 @@ import com.ktdsuniversity.admin.gnr.vo.GnrVO;
 
 public interface GnrService {
 
-	public List<GnrVO> readAllGnrVO(String gnrNm);
+	public List<GnrVO> readAllGnrVO(GnrVO gnrVO);
 	
 	public boolean createOneGnr(GnrVO gnrVO);
 	
 	public boolean updateOneGnr(GnrVO gnrVO);
 	
 	public boolean deleteOneGnr(int gnrId);
+	
+	public boolean deleteGnrBySelectedGnrId(List<Integer> gnrId);
 }

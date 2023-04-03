@@ -18,12 +18,14 @@ public class GnrController {
 	private GnrService gnrService;
 	
 	@GetMapping("/gnr/list") // http://localhost:8080/admin/gnr/list?gnrNm=장르명&pageNo=2&viewCnt=10
-	public String viewGnrListPage(Model model, 
-			@RequestParam(required = false) String gnrNm,
-			@RequestParam(required = false, defaultValue = "1") int pageNo,
-			@RequestParam(required = false, defaultValue = "10") int viewCnt) { //requestParm 필수파라미터 required 가 없으면 에러발생)
-		List<GnrVO> gnrList = gnrService.readAllGnrVO(gnrNm);
+	public String viewGnrListPage(Model model, GnrVO gnrVO) { //requestParm 필수파라미터 required 가 없으면 에러발생)
+		List<GnrVO> gnrList = gnrService.readAllGnrVO(gnrVO);
 		model.addAttribute("gnrList", gnrList);
+		model.addAttribute("gnrVO", gnrVO);
+//		model.addAttribute("gnrNm", gnrVO.getGnrNm());
+//		model.addAttribute("pageNo", gnrVO.getPageNo());
+//		model.addAttribute("viewCnt", gnrVO.getViewCnt());
+		
 		return "gnr/list";
 	}
 }

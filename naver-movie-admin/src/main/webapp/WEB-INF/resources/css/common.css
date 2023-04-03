@@ -107,6 +107,7 @@ body {
 	height: 70px;
 	padding: 10px;
 	position: relative;
+	background-color: cadetblue;
 }
 
 .bg-black {
@@ -237,4 +238,71 @@ body {
 	content: "상세정보";
 	font-size: 13pt;
 	font-weight: bold;
+}
+
+/* Search */
+.search-group {
+	display: flex;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 10px;
+	background-color: #ff8040;
+}
+
+.search-group .btn-search {
+	background-color: #00ffff;
+	border-radius: 3px;
+	border: 0px;
+	color: #FFF;
+	font-weight: bold;
+	font-size: 10pt;
+}
+
+.search-group .btn-search:active {
+	background-color: #bdccff;
+}
+
+.search-group label {
+	margin-right: 10px
+}
+
+.search-group > .search-input {
+	flex-grow: 1;
+	margin-right: 10px;
+}
+
+/* pagenate */
+
+.pagenate {
+	display: flex;
+	margin-top: 10px;
+	justify-content: center;
+	align-items: center;
+}
+
+.pagenate ul {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+
+.pagenate ul li {
+	display: inline-block;
+	margin: 0px;
+	padding: 5px;
+	background-color: #e3e3e3;
+}
+
+.pagenate ul li a {
+	text-decoration: none;
+}
+
+.pagenate ul li a.on {
+	font-weight: bold;
+}
+
+/* margin */
+.mt-10 {
+	margin-top: 10px;
 }

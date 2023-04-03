@@ -2,8 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@page import="java.util.Random"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="context" value="${pageContext.request.contextPath}" />
 <c:set var="date" value="<%= new Random().nextInt() %>" />
+
 
 <!DOCTYPE html>
 <html>
@@ -85,12 +87,57 @@
 					else {
 						alert(response.errorCode + " / " + response.message);
 					}
-				
 				});
 			}
-			
 		});
+		
+		$("#search-btn").click(function() {
+			movePage(0)
+		});
+		
+		$("#all_check").change(function() {
+		/* 	console.log($(this).prop("checked")); */
+			$(".check_idx").prop("checked", $(this).prop("checked"));
+		});
+		
+		$(".check_idx").change(function() {
+			var count = $(".check_idx").length;
+			var checkCount = $(".check_idx:checked").length;
+			$("#all_check").prop("checked", count == checkCount);
+		});
+		
+		$("#delete_all_btn").click(function() {
+			var checkLen = $(".check_idx:checked").length;
+			if (checkLen == 0) {
+				alert("삭제할 장르가 없습니다.");
+				return;
+			}
+			
+			var form = $("<form></form>")
+			
+			$(".check_idx:checked").each(function() {
+				console.log($(this).val());
+				form.append("<input type='hidden' name='gnrId' value='" + $(this).val() + "'>"); //name이 같으면 컬렉션으로 받는다 받아올때 List로 받는다.
+			});
+			
+			$.post("${context}/api/gnr/delete", form.serialize(), function(response) {
+				if (response.status == "200 OK") {
+					location.reload(); //새로고침
+				}
+				else {
+					alert(response.errorCode + " / " + response.message);
+				}
+			});
+		});
+		
 	});
+		function movePage(pageNo) {
+			// 전송
+			// 입력 값
+			var gnrNm = $("#search-keyword").val();
+			// URL 요청
+			location.href = "${context}/gnr/list?gnrNm=" + gnrNm + "&pageNo=" + pageNo;
+		}
 </script>
 </head>
 <body>
@@ -101,11 +148,16 @@
 			<jsp:include page="../include/content.jsp" />
 			
 				<div class="path">영화 > 장르관리</div>
-				
+				<div class="search-group">
+					<label for="search_keyword">장르명</label>
+					<input type="text" id="search-keyword" class="search-input" value="${gnrVO.gnrNm}"/>
+					
+					<button class="btn-search" id="search-btn">검색</button>
+				</div>
 				<div class="grid">
 					
 					<div class="grid-count align-right">
-						총 ${gnrList.size()}건 
+						총 ${gnrList.size() > 0 ? gnrList.get(0).totalCount : 0}건 
 					</div>
 					<table>
 						<thead>
@@ -157,6 +209,49 @@
 							</c:choose>
 						</tbody>
 					</table>
+					
+					<div class="align-right mt-10">
+						<button id="delete_all_btn" class="btn-delete">삭제</button>
+					</div>
+					
+					<div class="pagenate">
+						<ul>
+							<c:set value="${gnrList.size() > 0 ? gnrList.get(0).lastPage : 0}" var="lastPage" />
+							<c:set value="${gnrList.size() > 0 ? gnrList.get(0).lastGroup : 0}" var="lastGroup" />
+							
+							<fmt:parseNumber var="nowGroup" value="${Math.floor(gnrVO.pageNo / 10)}" integerOnly="true" />
+							<c:set value="${nowGroup * 10}" var="groupStartPageNo" />
+							<c:set value="${groupStartPageNo + 10}" var="groupEndPageNo" />
+							<c:set value="${groupEndPageNo > lastPage ? lastPage : groupEndPageNo-1}" var="groupEndPageNo" />
+							
+							<c:set value="${(nowGroup - 1) * 10}" var="prevGroupStartPageNo" />
+							<c:set value="${(nowGroup + 1) * 10}" var="nextGroupStartPageNo" />
+							
+							<!--lastPage: ${lastPage}
+							lastGroup: $lastGroup}
+							nowGroup: ${nowGroup}
+							groupStartPageNo: ${groupStartPageNo}
+							groupEndPageNo: ${groupEndPageNo}
+							prevGroupStartPageNo: ${prevGroupStartPageNo}
+							nextGroupStartPageNo: ${nextGroupStartPageNo}  -->
+							
+							<c:if test="${nowGroup > 0}">
+								<li><a href="javascript:movePage(0)">처음</a></li>
+								<li><a href="javascript:movePage(${prevGroupStartPageNo})">이전</a></li>
+							</c:if>
+							
+							<c:forEach begin="${groupStartPageNo}" end="${groupEndPageNo}" step="1" var="pageNo">
+								<li><a class="${pageNo eq gnrVO.pageNo ? 'on' : ''}" href="javascript:movePage(${pageNo})">${pageNo+1}</a></li>
+							</c:forEach>
+							
+							<c:if test="${lastGroup > nowGroup}">
+								<li><a href="javascript:movePage(${nextGroupStartPageNo})">다음</a></li>
+								<li><a href="javascript:movePage(${lastPage})">끝</a></li>
+							</c:if>
+							
+						</ul>
+					</div>
+					
 				</div>
 				
 				<div class="grid-detail">

@@ -4,8 +4,9 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Gnr">
 	<select id="readAllGnrVO"
-			parameterType="string"
+			parameterType="com.ktdsuniversity.admin.gnr.vo.GnrVO"
 			resultType="com.ktdsuniversity.admin.gnr.vo.GnrVO">
+		<include refid="Common.page_header"/> <!-- 쿼리 import -->
 		SELECT G.GNR_ID
 		     , G.GNR_NM
 		     , TO_CHAR(G.CRT_DT, 'YYYY-MM-DD HH24:MI:SS') CRT_DT
@@ -22,10 +23,11 @@
 		    ON G.MDFYR = MDFY_M.MBR_ID
 		 WHERE G.DEL_YN = 'N'
 		 /* 파라미터 체크 */
-		 <if test='_parameter !=null and _parameter != ""'> <!-- 썻다면 쿼리 추가해라 -->
-		   AND G.GNR_NM = #{_parameter}
+		 <if test='gnrNm !=null and gnrNm != ""'> <!-- 썻다면 쿼리 추가해라 -->
+		   AND G.GNR_NM LIKE '%' || #{gnrNm} || '%'
 		 </if>
 		 ORDER BY G.GNR_ID ASC
+		 <include refid="Common.page_footer"/>
 	</select>
 
 	<insert id="createOneGnr"
@@ -65,5 +67,15 @@
 		UPDATE GNR
 		   SET DEL_YN = 'Y' 
 		 WHERE GNR_ID = #{_parameter}
+	</update>
+	
+	<update id="deleteGnrBySelectedGnrId"
+			parameterType="arraylist">
+		UPDATE GNR
+		   SET DEL_YN = 'Y'
+		 WHERE GNR_ID IN 
+		<foreach collection="list" item="gnrId" open="(" close=")" separator=", ">
+			#{gnrId}
+		</foreach>
 	</update>
 </mapper>
