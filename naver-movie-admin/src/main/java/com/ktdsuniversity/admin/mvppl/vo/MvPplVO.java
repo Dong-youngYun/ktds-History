@@ -1,59 +1,26 @@
 package com.ktdsuniversity.admin.mvppl.vo;
 
+import com.ktdsuniversity.admin.common.vo.AbstractVO;
+import com.ktdsuniversity.admin.mbr.vo.MbrVO;
+
 /**
  * MV_PPL
  */
-public class MvPplVO {
+public class MvPplVO extends AbstractVO {
 
-	/**
-	 * 
-	 */
 	private String mvPplId;
-
-	/**
-	 * 
-	 */
 	private String prflPctr;
-
-	/**
-	 * 
-	 */
 	private String nm;
-
-	/**
-	 * 
-	 */
 	private String rlNm;
-
-	/**
-	 * 
-	 */
 	private String crtDt;
-
-	/**
-	 * 
-	 */
 	private String crtr;
-
-	/**
-	 * 
-	 */
 	private String mdfyDt;
-
-	/**
-	 * 
-	 */
 	private String mdfyr;
-
-	/**
-	 * 
-	 */
 	private String useYn;
-
-	/**
-	 * 
-	 */
 	private String delYn;
+	
+	private MbrVO crtrMbrVO;
+	private MbrVO mdfyrMbrVO;
 
 
 	public void setMvPplId(String mvPplId) {
@@ -134,6 +101,22 @@ public class MvPplVO {
 
 	public String getDelYn() {
 		return this.delYn;
+	}
+	
+	public MbrVO getCrtrMbrVO() {
+		return crtrMbrVO;
+	}
+
+	public void setCrtrMbrVO(MbrVO crtrMbrVO) {
+		this.crtrMbrVO = crtrMbrVO;
+	}
+
+	public MbrVO getMdfyrMbrVO() {
+		return mdfyrMbrVO;
+	}
+
+	public void setMdfyrMbrVO(MbrVO mdfyrMbrVO) {
+		this.mdfyrMbrVO = mdfyrMbrVO;
 	}
 
 }

@@ -107,7 +107,7 @@ body {
 	height: 70px;
 	padding: 10px;
 	position: relative;
-	background-color: cadetblue;
+	background-color: #25aaaf;
 }
 
 .bg-black {
@@ -152,6 +152,7 @@ body {
 	position: fixed;
 	top: 90px;
 	bottom: 0px;
+	background-color: #44d3a3;
 }
 
 .main-layout > div > .side-menu > .menu-list {
@@ -246,20 +247,35 @@ body {
 	margin-top: 10px;
 	margin-bottom: 10px;
 	padding: 10px;
-	background-color: #ff8040;
+	background-color: #6a7ac1;
+}
+
+.search-row-group {
+	display: flex;
+	flex-direction: column;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background-color: #343434;
+}
+
+.search-row-group .search-group { /* 재정의로 덮어쓰는 형태 */
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 
 .search-group .btn-search {
-	background-color: #00ffff;
+	background-color: #0080ff;
 	border-radius: 3px;
 	border: 0px;
-	color: #FFF;
+	color: #000000;
 	font-weight: bold;
 	font-size: 10pt;
 }
 
+
+
 .search-group .btn-search:active {
-	background-color: #bdccff;
+	background-color: #00ff00;
 }
 
 .search-group label {

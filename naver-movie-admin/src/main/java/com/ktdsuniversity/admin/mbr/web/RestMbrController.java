@@ -57,7 +57,6 @@ public class RestMbrController {
 		return new ApiResponseVO(ApiStatus.FAIL);
 	}
 	
-	
 	@PostMapping("/api/mbr/create")
 	public ApiResponseVO doCreateNewAdmin(MbrVO mbrVO) {
 		
