@@ -8,6 +8,8 @@ public interface MvPplDAO {
 
 	public List<MvPplVO> readAllMvPplVO(MvPplVO mvPplVO);
 	
+	public MvPplVO readOneMvPplVOByMvPplId(String mvPplId); // update를 위한 비교를 위해 원본 정보를 가져오기
+	
 	public int createOneMvPpl(MvPplVO mvPplVO);
 	
 	public int updateOneMvPplByMvPplId(MvPplVO mvPplVO);

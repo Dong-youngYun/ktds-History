@@ -322,3 +322,14 @@ body {
 .mt-10 {
 	margin-top: 10px;
 }
+
+/* profile */
+input[type=file] {
+	display: none;
+}
+
+img.profile {
+	border-radius: 50px; 
+	width: 100px; 
+	height: 100px
+}

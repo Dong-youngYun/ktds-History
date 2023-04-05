@@ -21,6 +21,8 @@ public class MvPplVO extends AbstractVO {
 	
 	private MbrVO crtrMbrVO;
 	private MbrVO mdfyrMbrVO;
+	
+	private String isDeletePctr;
 
 
 	public void setMvPplId(String mvPplId) {
@@ -117,6 +119,14 @@ public class MvPplVO extends AbstractVO {
 
 	public void setMdfyrMbrVO(MbrVO mdfyrMbrVO) {
 		this.mdfyrMbrVO = mdfyrMbrVO;
+	}
+
+	public String getIsDeletePctr() {
+		return isDeletePctr;
+	}
+
+	public void setIsDeletePctr(String isDeletePctr) {
+		this.isDeletePctr = isDeletePctr;
 	}
 
 }

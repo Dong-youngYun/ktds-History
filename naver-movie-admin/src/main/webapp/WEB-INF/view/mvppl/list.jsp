@@ -16,17 +16,36 @@
 <script type="text/javascript">
 	$().ready(function() {
 		
+		var ajaxUtil = new AjaxUtil();
+		
 		$(".grid > table > tbody > tr").click(function() {
 			$("#isModify").val("true"); //수정모드
 			
-			var data = $(this).data();
-			$("#gnrId").val(data.gnrid);
-			$("#gnrNm").val(data.gnrnm);
-			$("#crtr").val(data.crtr);
-			$("#crtDt").val(data.crtdt);
-			$("#mdfyr").val(data.mdfyr);
-			$("#mdfyDt").val(data.mdfydt);
+			/*
+			data-mvpplid="${mvPpl.mvPplId}"
+			data-prflpctr="${mvPpl.prflPctr}"
+			data-nm="${mvPpl.nm}"
+			data-rlnm="${mvPpl.rlNm}"
+			data-crtr="${mvPpl.crtr}"
+			data-crtdt="${mvPpl.crtDt}"
+			data-mdfyr="${mvPpl.mdfyr}"
+			data-mdfydt="${mvPpl.mdfyDt}"
+			data-useyn="${mvPpl.useYn}"
+			data-crtrnm="${mvPpl.crtrMbrVO.mbrNm}"
+			data-mdfyrnm="${mvPpl.mdfyrMbrVO.mbrNm}"
+			*/
 			
+			var data = $(this).data();
+			$("#mvPplId").val(data.mvpplid);
+			//$("#prflPctr").val(data.prflpctr);
+			$("#nm").val(data.nm);
+			$("#rlNm").val(data.rlnm);
+			$("#crtDt").val(data.crtdt);
+			$("#crtr").val(data.crtr + "(" + data.crtrnm + ")");
+			$("#mdfyDt").val(data.mdfydt);
+			$("#mdfyr").val(data.mdfyr + "(" +data.mdfyrnm + ")");
+			
+			$("#previewPrfl").attr("src", "${context}/mvppl/prfl/" +data.prflpctr +"/");
 			$("#useYn").prop("checked", data.useyn == "Y");
 		});
 		
@@ -34,19 +53,21 @@
 			
 			$("#isModify").val("false"); //등록모드
 			
-			$("#gnrId").val("");
-			$("#gnrNm").val("");
-			$("#crtr").val("");
+			$("#mvPplId").val("");
+			//$("#prflPctr").val("");
+			$("#nm").val("");
+			$("#rlNm").val("");
 			$("#crtDt").val("");
+			$("#crtr").val("");
+			$("#mdfyDt").val("");
 			$("#mdfyr").val("");
-			$("#mdfyDt").val(0);
 			
 			$("#useYn").prop("checked", false);
 		});
 		
 		$("#delete_btn").click(function() {
-			var gnrId =$("#gnrId").val()
-			if (gnrId == "") {
+			var mvPplId =$("#mvPplId").val()
+			if (mvPplId == "") {
 				alert("선택된 장르가 없습니다.");
 				return;
 			}
@@ -55,7 +76,7 @@
 				return;
 			}
 			
-			$.get("${context}/api/mvppl/delete/" + gnrId, function(response) {
+			$.get("${context}/api/mvppl/delete/" + mvPplId, function(response) {
 				if (response.status == "200 OK") {
 					location.reload(); //새로고침
 				}
@@ -67,7 +88,7 @@
 		
 		$("#save_btn").click(function() {
 			
-			var fm = new FormData();
+			/* var fm = new FormData();
 			fm.append("uploadFile", $('#prflPctr')[0].files[0])
 			fm.append("nm", $("#nm").val());
 			fm.append("rlNm", $("#rlNm").val());
@@ -84,30 +105,30 @@
 				}
 			});
 			
-			return;
+			return; */
 			
 			if($("#isModify").val() == "false") {
 				//신규등록
-				$.post("${context}/api/mvppl/create", $("#detail-form").serialize(), function(response) {
+				ajaxUtil.upload("#detail_form", "${context}/api/mvppl/create", function(response) { //업로드 성공하면 function 수행
 					if (response.status == "200 OK") {
 						location.reload(); //새로고침
 					}
 					else {
 						alert(response.errorCode + " / " + response.message);
 					}
+				}, {"prflPctr" : "uploadFile"});
 				
-				});
 			}
 			else {
 				//수정
-				$.post("${context}/api/mvppl/update", $("#detail-form").serialize(), function(response) {
+				ajaxUtil.upload("#detail_form", "${context}/api/mvppl/update", function(response) { 
 					if (response.status == "200 OK") {
 						location.reload(); //새로고침
 					}
 					else {
 						alert(response.errorCode + " / " + response.message);
 					}
-				});
+				}, {"prflPctr" : "uploadFile"});
 			}
 		});
 		
@@ -137,7 +158,7 @@
 			
 			$(".check_idx:checked").each(function() {
 				console.log($(this).val());
-				form.append("<input type='hidden' name='gnrId' value='" + $(this).val() + "'>"); //name이 같으면 컬렉션으로 받는다 받아올때 List로 받는다.
+				form.append("<input type='hidden' name='mvPplId' value='" + $(this).val() + "'>"); //name이 같으면 컬렉션으로 받는다 받아올때 List로 받는다.
 			});
 			
 			$.post("${context}/api/mvppl/delete", form.serialize(), function(response) {
@@ -150,13 +171,65 @@
 			});
 		});
 		
+		$("#previewPrfl").click(function() {
+			$("#prflPctr").click();
+		});
+		
+		$("#prflPctr").change(function() {
+			//선택한 파일 정보
+			var file = $(this)[0].files;
+			console.log(file);
+			
+			if (file.length > 0) {
+				var fileReader = new FileReader();
+				fileReader.onload = function(data) {
+					//FileReader 객체 로드가 완료됬을때.
+					console.log(data);
+					$("#previewPrfl").attr("src", data.target.result); //src가 이미지의 경로
+				}
+				fileReader.readAsDataURL(file[0]);
+				$("#isDeletePctr").val("Y");
+			}
+			else {
+				// 기본 이미지로 변경
+				$("#prflPctr").val("");
+				$("#previewPrfl").attr("src", "${context}/img/baseProfile.png");
+				$("#isDeletePctr").val("Y");
+			}
+		});
+		
+		$("#del_pctr").click(function(event) {
+			event.preventDefault();
+			$("#prflPctr").val("");
+			$("#previewPrfl").attr("src", "${context}/img/baseProfile.png");
+			$("#isDeletePctr").val("Y"); //클릭을 하면 Y로 변경
+		});
+		
 	});
 		function movePage(pageNo) {
 			// 전송
 			// 입력 값
-			var gnrNm = $("#search-keyword").val();
+			var nm = $("#search-keyword-nm").val();
+			var rlNm = $("#search-keyword-rlnm").val();
+			var startDt = $("#search-keyword-startdt").val();
+			var endDt = $("#search-keyword-enddt").val();
+			
+			var intstartDt = parseInt(startDt.split("-").join(""));
+			var intEndDt = parseInt(endDt.split("-").join(""));
+
+			if (intstartDt > intEndDt) {
+				alert("시작일자를 확인해 주세요")
+				return;
+			}
+			
+			var queryString = "nm=" + nm;
+			queryString += "&rlNm=" + rlNm;
+			queryString += "&startDt=" + startDt;
+			queryString += "&endDt=" + endDt;
+			queryString += "&pageNo=" + pageNo;
+			
 			// URL 요청
-			location.href = "${context}/mvppl/list?gnrNm=" + gnrNm + "&pageNo=" + pageNo;
+			location.href = "${context}/mvppl/list?" + queryString;
 		}
 </script>
 </head>
@@ -302,7 +375,12 @@
 							<label for="mvPplId" style="width: 180px;">영화인ID</label><input type="text" id="mvPplId" name="mvPplId" readonly value="" />
 						</div>
 						<div class="input-group inline">
-							<label for="prflPctr" style="width: 180px;">프로필사진</label><input type="file" id="prflPctr" name="prflPctr" value=""/>
+							<div style="position: relative;">
+								<label for="prflPctr" style="width: 180px;">프로필사진</label><input type="file" id="prflPctr" name="prflPctr" value="" />
+								<img src="${context}/img/baseProfile.png" id="previewPrfl" class="profile"/>
+								<button id="del_pctr" style="position: absolute; right: 10px; bottom: 10px;">X</button>
+								<input type="hidden" id="isDeletePctr" name="isDeletePctr" value="N" />
+							</div>
 						</div>
 						<div class="input-group inline">
 							<label for="nm" style="width: 180px;">이름</label><input type="text" id="nm" name="nm" value=""/>

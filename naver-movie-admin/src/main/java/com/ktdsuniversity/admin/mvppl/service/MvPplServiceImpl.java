@@ -1,10 +1,17 @@
 package com.ktdsuniversity.admin.mvppl.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ktdsuniversity.admin.common.api.exceptions.ApiException;
 import com.ktdsuniversity.admin.mvppl.dao.MvPplDAO;
@@ -12,6 +19,11 @@ import com.ktdsuniversity.admin.mvppl.vo.MvPplVO;
 
 @Service
 public class MvPplServiceImpl implements MvPplService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MvPplServiceImpl.class);
+	
+	@Value("${upload.profile.path:/naver-movie-admin/files/profiles}")
+	private String profilePath;
 
 	@Autowired
 	private MvPplDAO mvPplDAO;
@@ -19,7 +31,6 @@ public class MvPplServiceImpl implements MvPplService {
 	@Override
 	public List<MvPplVO> readAllMvPplVO(MvPplVO mvPplVO) {
 		
-		// TODO
 		// Calender -> 같은 코드 반복사용이 많아서 Util로 빼서 작성
 		// startDt가 비어있을 경우, 현재일의 한달전 날짜를 가져와서 세팅한다.
 		if (mvPplVO.getStartDt() == null || mvPplVO.getStartDt().length() == 0) {
@@ -65,13 +76,94 @@ public class MvPplServiceImpl implements MvPplService {
 	}
 
 	@Override
-	public boolean createOneMvPpl(MvPplVO mvPplVO) {
+	public boolean createOneMvPpl(MvPplVO mvPplVO, MultipartFile uploadFile) {
+		
+		if (uploadFile != null && !uploadFile.isEmpty()) {
+			
+			File dir = new File(profilePath);
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
+			
+			String uuidFileName = UUID.randomUUID().toString();
+			File profileFile = new File(dir, uuidFileName);
+			try {
+				uploadFile.transferTo(profileFile);
+			} catch (IllegalStateException | IOException e) {
+				logger.error(e.getMessage(), e);
+			}
+			mvPplVO.setPrflPctr(uuidFileName);
+		}
+		
 		return mvPplDAO.createOneMvPpl(mvPplVO) > 0;
 	}
 
 	@Override
-	public boolean updateOneMvPplByMvPplId(MvPplVO mvPplVO) {
-		return mvPplDAO.updateOneMvPplByMvPplId(mvPplVO) > 0;
+	public boolean updateOneMvPplByMvPplId(MvPplVO mvPplVO, MultipartFile uploadFile) {
+		
+		if (uploadFile != null && !uploadFile.isEmpty()) {
+			
+			File dir = new File(profilePath);
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
+			
+			String uuidFileName = UUID.randomUUID().toString();
+			File profileFile = new File(dir, uuidFileName);
+			try {
+				uploadFile.transferTo(profileFile);
+			} catch (IllegalStateException | IOException e) {
+				logger.error(e.getMessage(), e);
+			}
+			mvPplVO.setPrflPctr(uuidFileName);
+		}
+		
+		boolean isModify = false;
+		MvPplVO originalMvPplData = mvPplDAO.readOneMvPplVOByMvPplId(mvPplVO.getMvPplId()); // 비교를 위해 원본 조회
+		
+		MvPplVO updateMvPplVO = new MvPplVO(); //mvPplVO로 하면 모든 정보를 다 받아와서 바뀐 정보만 가져오기 위해 새로 생성해 하나씩 가져온다.
+		updateMvPplVO.setMdfyr(mvPplVO.getMdfyr());
+		updateMvPplVO.setMvPplId(mvPplVO.getMvPplId());
+		updateMvPplVO.setRlNm(mvPplVO.getRlNm()); //nullable
+		
+		if ( (mvPplVO.getPrflPctr() == null || mvPplVO.getPrflPctr().length() == 0)
+				&& mvPplVO.getIsDeletePctr().equals("N")) {
+			updateMvPplVO.setPrflPctr(originalMvPplData.getPrflPctr());
+		}
+		else {
+			isModify = true;
+			updateMvPplVO.setPrflPctr(mvPplVO.getPrflPctr());
+		}
+		
+		if (!originalMvPplData.getNm().equals(mvPplVO.getNm())) {
+			isModify = true;
+			updateMvPplVO.setNm(mvPplVO.getNm());
+		}
+		
+		String rlNm = originalMvPplData.getRlNm();
+		
+		if (rlNm == null) {
+			rlNm = "";
+		}
+		
+		if (!rlNm.equals(mvPplVO.getRlNm())) { // 바뀐지 안바뀐지만 알려준다
+			isModify = true;
+		}
+		
+		String requestUseYn = mvPplVO.getUseYn() == null || mvPplVO.getUseYn().length() == 0
+												? "N" : mvPplVO.getUseYn();
+		if (!originalMvPplData.getUseYn().equals(requestUseYn)) {
+			isModify = true;
+			updateMvPplVO.setUseYn(mvPplVO.getUseYn());
+		}
+		
+		if (isModify) {
+			return mvPplDAO.updateOneMvPplByMvPplId(updateMvPplVO) > 0;
+		}
+		else {
+			throw new ApiException("400", "변경된 정보가 없습니다.");
+		}
+		
 	}
 
 	@Override
