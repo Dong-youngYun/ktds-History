@@ -1,65 +1,32 @@
 package com.ktdsuniversity.admin.prdcprtcptnppl.vo;
 
+import java.util.List;
+
+import com.ktdsuniversity.admin.mbr.vo.MbrVO;
+import com.ktdsuniversity.admin.mvppl.vo.MvPplVO;
+
 /**
  * PRDC_PRTCPTN_PPL
  */
 public class PrdcPrtcptnPplVO {
 
-	/**
-	 * 
-	 */
 	private String prdcPrtcptnId;
-
-	/**
-	 * 
-	 */
 	private String mvId;
-
-	/**
-	 * 
-	 */
 	private String mvPplId;
-
-	/**
-	 * 
-	 */
 	private String mssn;
-
-	/**
-	 * 
-	 */
 	private String rspnsbltRolNm;
-
-	/**
-	 * 
-	 */
 	private String crtDt;
-
-	/**
-	 * 
-	 */
 	private String crtr;
-
-	/**
-	 * 
-	 */
 	private String mdfyDt;
-
-	/**
-	 * 
-	 */
 	private String mdfyr;
-
-	/**
-	 * 
-	 */
 	private String useYn;
-
-	/**
-	 * 
-	 */
 	private String delYn;
-
+	
+	private List<String> deleted; //prdcPrtcptnId
+	
+	private MvPplVO mvPplVO;
+	private MbrVO crtrMbrVO;
+	private MbrVO mdfyrMbrVO;
 
 	public void setPrdcPrtcptnId(String prdcPrtcptnId) {
 		this.prdcPrtcptnId = prdcPrtcptnId;
@@ -148,5 +115,40 @@ public class PrdcPrtcptnPplVO {
 	public String getDelYn() {
 		return this.delYn;
 	}
+	
+	public List<String> getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(List<String> deleted) {
+		this.deleted = deleted;
+	}
+
+	public MvPplVO getMvPplVO() {
+		return mvPplVO;
+	}
+
+	public void setMvPplVO(MvPplVO mvPplVO) {
+		this.mvPplVO = mvPplVO;
+	}
+	
+
+	public MbrVO getCrtrMbrVO() {
+		return crtrMbrVO;
+	}
+
+	public void setCrtrMbrVO(MbrVO crtrMbrVO) {
+		this.crtrMbrVO = crtrMbrVO;
+	}
+
+	public MbrVO getMdfyrMbrVO() {
+		return mdfyrMbrVO;
+	}
+
+	public void setMdfyrMbrVO(MbrVO mdfyrMbrVO) {
+		this.mdfyrMbrVO = mdfyrMbrVO;
+	}
+
+	
 
 }

@@ -13,7 +13,7 @@
 		, ACT_DT
 		, IP)
 		VALUES
-		 ('LH' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(SEQ_MBR_LGN_HIST_PK.NEXTVAL, 5, 0)
+		 ('LH' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(SEQ_MBR_LGN_HIST_PK.NEXTVAL, 5, '0')
 		, #{mbrId}
 		, #{act}
 		, SYSDATE

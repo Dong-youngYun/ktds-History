@@ -1,50 +1,29 @@
 package com.ktdsuniversity.admin.mvgnr.vo;
 
+import java.util.List;
+
+import com.ktdsuniversity.admin.gnr.vo.GnrVO;
+import com.ktdsuniversity.admin.mbr.vo.MbrVO;
+
 /**
  * MV_GNR
  */
 public class MvGnrVO {
 
-	/**
-	 * 
-	 */
 	private String mvId;
-
-	/**
-	 * 
-	 */
 	private int gnrId;
-
-	/**
-	 * 
-	 */
 	private String crtDt;
-
-	/**
-	 * 
-	 */
 	private String crtr;
-
-	/**
-	 * 
-	 */
 	private String mdfyDt;
-
-	/**
-	 * 
-	 */
 	private String mdfyr;
-
-	/**
-	 * 
-	 */
 	private String useYn;
-
-	/**
-	 * 
-	 */
 	private String delYn;
+	
+	private List<String> deleted; // gnrId
 
+	private GnrVO gnrVO; // 장르명같은 정보를 가져오기 위해
+	private MbrVO crtrMbrVO;
+	private MbrVO mdfyrMbrVO;
 
 	public void setMvId(String mvId) {
 		this.mvId = mvId;
@@ -109,5 +88,39 @@ public class MvGnrVO {
 	public String getDelYn() {
 		return this.delYn;
 	}
+	
+	public List<String> getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(List<String> deleted) {
+		this.deleted = deleted;
+	}
+
+	public GnrVO getGnrVO() {
+		return gnrVO;
+	}
+
+	public void setGnrVO(GnrVO gnrVO) {
+		this.gnrVO = gnrVO;
+	}
+	
+	public MbrVO getCrtrMbrVO() {
+		return crtrMbrVO;
+	}
+
+	public void setCrtrMbrVO(MbrVO crtrMbrVO) {
+		this.crtrMbrVO = crtrMbrVO;
+	}
+
+	public MbrVO getMdfyrMbrVO() {
+		return mdfyrMbrVO;
+	}
+
+	public void setMdfyrMbrVO(MbrVO mdfyrMbrVO) {
+		this.mdfyrMbrVO = mdfyrMbrVO;
+	}
+
+	
 
 }
