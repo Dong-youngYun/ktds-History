@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="java.util.Random"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="context" value="${pageContext.request.contextPath}" />
 <c:set var="date" value="<%= new Random().nextInt() %>" />
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,13 +12,11 @@
 <title>Insert title here</title>
 <jsp:include page="../include/stylescript.jsp" />
 <script type="text/javascript">
-	$().ready(function() {
-		$("#new_btn").click(function() {
-			location.href="${context}/mv/create"
+	$().ready(function(){
+		$("#new_btn").click(function(){
+			location.href = "${context}/mv/create";
 		});
-	
 	});
-		
 </script>
 </head>
 <body>
@@ -28,16 +24,17 @@
 		<jsp:include page="../include/header.jsp" />
 		<div>
 			<jsp:include page="../include/mvMgntsidemenu.jsp" />
+			
 			<jsp:include page="../include/content.jsp" />
 			
-				<div class="path">영화 > 영화관리 > 등록</div>
+				<div class="path">영화 > 영화관리</div>
 				
-				등록
 				
+			
 				<div class="align-right">
 					<button id="new_btn" class="btn-primary">등록</button>
 					<button id="delete_btn" class="btn-delete">삭제</button>
-				</div>
+				</div>		
 			<jsp:include page="../include/footer.jsp" />
 		</div>
 	</div>

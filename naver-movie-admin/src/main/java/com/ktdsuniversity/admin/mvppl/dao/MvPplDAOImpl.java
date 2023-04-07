@@ -27,6 +27,11 @@ public class MvPplDAOImpl extends SqlSessionDaoSupport implements MvPplDAO {
 	public List<MvPplVO> readAllMvPplVO(MvPplVO mvPplVO) {
 		return getSqlSession().selectList("MvPpl.readAllMvPplVO", mvPplVO);
 	}
+	
+	@Override
+	public List<MvPplVO> readAllMvPplVONopagination(String nm) {
+		return getSqlSession().selectList("MvPpl.readAllMvPplVONopagination", nm);
+	}
 
 	@Override
 	public int createOneMvPpl(MvPplVO mvPplVO) {
@@ -47,5 +52,7 @@ public class MvPplDAOImpl extends SqlSessionDaoSupport implements MvPplDAO {
 	public int deleteMvPplBySelectedMvPplId(List<String> mvPplIdList) {
 		return getSqlSession().update("MvPpl.deleteMvPplBySelectedMvPplId", mvPplIdList);
 	}
+
+	
 
 }

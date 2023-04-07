@@ -10,6 +10,8 @@ public interface MvPplService {
 
 	public List<MvPplVO> readAllMvPplVO(MvPplVO mvPplVO);
 	
+	public List<MvPplVO> readAllMvPplVONopagination(String nm);
+	
 	public boolean createOneMvPpl(MvPplVO mvPplVO, MultipartFile uploadFile);
 	
 	public boolean updateOneMvPplByMvPplId(MvPplVO mvPplVO, MultipartFile uploadFile);

@@ -250,6 +250,10 @@ body {
 	background-color: #6a7ac1;
 }
 
+.grow-1 {
+	flex-grow: 1;
+}
+
 .search-row-group {
 	display: flex;
 	flex-direction: column;
@@ -271,8 +275,6 @@ body {
 	font-weight: bold;
 	font-size: 10pt;
 }
-
-
 
 .search-group .btn-search:active {
 	background-color: #00ff00;
@@ -332,4 +334,26 @@ img.profile {
 	border-radius: 50px; 
 	width: 100px; 
 	height: 100px
+}
+
+/* 등록 폼*/
+.create-group {
+	display: flex;
+}
+.create-group label {
+	display: inline-block;
+	background-color: #e3e3e3;
+	width: 130px;
+	padding: 10px
+	
+}
+.create-group input,
+.create-group select {
+	flex-grow: 1;
+	margin: 10px;
+}
+.create-group textarea {
+	flex-grow: 1;
+	margin: 10px;
+	height: 300px;
 }
