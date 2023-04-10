@@ -1,11 +1,17 @@
 package com.ktdsuniversity.admin.mv.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ktdsuniversity.admin.common.api.exceptions.ApiArgsException;
+import com.ktdsuniversity.admin.common.api.exceptions.ApiException;
 import com.ktdsuniversity.admin.mv.dao.MvDAO;
 import com.ktdsuniversity.admin.mv.vo.MvVO;
 import com.ktdsuniversity.admin.mvgnr.dao.MvGnrDAO;
@@ -15,6 +21,9 @@ import com.ktdsuniversity.admin.prdcprtcptnppl.vo.PrdcPrtcptnPplVO;
 
 @Service
 public class MvServiceImpl implements MvService {
+	
+	@Value("${upload.mv.poster.path:/naver-movie-admin/files/mv/poster}")
+	private String pstrPath;
 	
 	@Autowired
 	private MvDAO mvDAO;
@@ -26,7 +35,31 @@ public class MvServiceImpl implements MvService {
 	private MvGnrDAO mvGnrDAO;
 
 	@Override
-	public boolean createNewMv(MvVO mvVO) {
+	public boolean createNewMv(MvVO mvVO, MultipartFile uploadFile) {
+		
+		if (uploadFile != null && !uploadFile.isEmpty()) {
+			
+			// 파일 저장.
+			// 포스터를 저장할 폴더 있는지 체크
+			File dir = new File(pstrPath);
+			if (!dir.exists()) {
+				// 없다면 폴더 생성
+				dir.mkdirs();
+			}
+			
+			// 난수이름의 파일을 임시 생성
+			String uuidFileName = UUID.randomUUID().toString();
+			File pstrFile = new File(dir, uuidFileName);
+			
+			// 임시생성한 파일에 업로드 파일 이동.
+			try {
+				uploadFile.transferTo(pstrFile);
+			} catch (IllegalStateException | IOException e) {
+				throw new ApiException("500", "포스터 업로드를 실패했습니다.");
+			}
+			mvVO.setPstr(uuidFileName);
+		}
+		
 		
 		int mvCreateCount = mvDAO.createNewMv(mvVO);
 		if (mvCreateCount > 0) {
@@ -37,6 +70,9 @@ public class MvServiceImpl implements MvService {
 				throw new ApiArgsException("404", "장르를 선택하세요.");
 			}
 			for (MvGnrVO gnr: gnrList) {
+				gnr.setMvId(mvVO.getMvId()); // 먼저 받아온 시퀀스 값을 넣어준다.
+				gnr.setCrtr(mvVO.getCrtr()); 
+				gnr.setMdfyr(mvVO.getMdfyr()); 
 				mvGnrDAO.createNewMvGnr(gnr);
 			}
 			// 영화참여인 등록 - 반복
@@ -45,11 +81,19 @@ public class MvServiceImpl implements MvService {
 				throw new ApiArgsException("404", "영화참여인을 선택하세요.");
 			}
 			for (PrdcPrtcptnPplVO ppl: pplList) {
+				ppl.setMvId(mvVO.getMvId());
+				ppl.setCrtr(mvVO.getCrtr());
+				ppl.setMdfyr(mvVO.getMdfyr());
 				prdcPrtcptnPplDAO.createNewPrdcPrtcptnPpl(ppl);
 			}
 		}
 		
 		return mvCreateCount > 0;
+	}
+
+	@Override
+	public MvVO readOneMvByMvId(String mvId) {
+		return mvDAO.readOneMvByMvId(mvId);
 	}
 
 }

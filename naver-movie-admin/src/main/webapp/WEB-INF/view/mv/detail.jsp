@@ -153,7 +153,7 @@
 			<jsp:include page="../include/mvMgntsidemenu.jsp" />
 			<jsp:include page="../include/content.jsp" />
 			
-				<div class="path">영화 > 영화관리 > 등록</div>
+				<div class="path">영화 > 영화관리 > 등록 </div>
 				<h1>영화 정보 등록</h1>
 					<form id="create_form" enctype="multipart/form-data">
 					<div>
@@ -166,57 +166,65 @@
 					<div>
 						<div class="create-group">
 							<label for="mvTtl">영화제목</label>
-							<input type="text" id="mvTtl" name="mvTtl" />
+							<input type="text" id="mvTtl" name="mvTtl" value="${mvVO.mvTtl}" />
 						</div>
 					</div>
 					<div>
 						<div class="create-group">
 							<label for="engTtl">영화제목(영어)</label>
-							<input type="text" id="engTtl" name="engTtl" />
+							<input type="text" id="engTtl" name="engTtl" value="${mvVO.engTtl}"/>
 						</div>
 					</div>
 					<div>
 						<div class="create-group">
 							<label for="scrnStt">상영상태</label>
 							<select id="scrnStt" name="scrnStt">
-								<option>선택</option>
-								<option value="상영중">상영중</option>
-								<option value="상영예정">상영예정</option>
-								<option value="상영종료">상영종료</option>
+								<option>선택</option> 
+								<option value="상영중" ${mvVO.scrnStt eq '상영중' ? 'selected' : ''}>상영중</option><!-- selected가 있는것을 디폴트 값 -->
+								<option value="상영예정" ${mvVO.scrnStt eq '상영예정' ? 'selected' : ''}>상영예정</option>
+								<option value="상영종료" ${mvVO.scrnStt eq '상영종료' ? 'selected' : ''}>상영종료</option>
 							</select>
 						</div>
 						<div class="create-group">
 							<label for="scrnTm">상영시간</label>
-							<input type="number" id="scrnTm" name="scrnTm" value="0" />
+							<input type="number" id="scrnTm" name="scrnTm" value="${mvVO.scrnTm}" />
 						</div>
 						<div class="create-group">
 							<label for="opngDt">개봉일</label>
-							<input type="date" id="opngDt" name="opngDt" />
+							<input type="date" id="opngDt" name="opngDt" value="${mvVO.opngDt}"/>
 						</div>
 						<div class="create-group">
 							<label for="grd">관람등급</label>
 							<select id="grd" name="grd" >
 								<option>선택</option>						
-								<option value="전체관람가">전체관람가</option>						
-								<option value="7">7세이상 관람가</option>						
-								<option value="12">12세이상 관람가</option>						
-								<option value="15">15세이상 관람가</option>						
-								<option value="19">청소년관람불가</option>						
+								<option value="전체관람가" ${mvVO.grd eq '전체관람가' ? 'selected' : ''}>전체관람가</option>						
+								<option value="7" ${mvVO.grd eq '7' ? 'selected' : ''}>7세이상 관람가</option>						
+								<option value="12" ${mvVO.grd eq '12' ? 'selected' : ''}>12세이상 관람가</option>						
+								<option value="15" ${mvVO.grd eq '15' ? 'selected' : ''}>15세이상 관람가</option>						
+								<option value="19" ${mvVO.grd eq '19' ? 'selected' : ''}>청소년관람불가</option> <!-- DB에 있는 value와 비교 -->						
 							</select>
 						</div>
 						<div class="create-group">
 							<label for="smr">줄거리</label>
-							<textarea id="smr" name="smr"></textarea>
+							<textarea id="smr" name="smr">${mvVO.smr}</textarea> <!-- textarea사이에 넣는게 value -->
 						</div>
 						<div class="create-group">
 							<label for="useYn">게시여부</label>
-							<input type="checkbox" id="useYn" name="useYn" value="Y" />
+							<input type="checkbox" id="useYn" name="useYn" value="Y" ${mvVO.useYn eq 'Y' ? 'checked' : 'N'} />
 						</div>
 						<div class="create-group">
 							<label for="addGnrBtn">장르</label>
 							<div>
 								<button id="addGnrBtn" class="btn-primary">등록</button>
-								<div class="items"></div>
+								<div class="items">
+									<c:forEach items="${mvVO.gnrList}" var="gnr" varStatus="index"> <!-- varStatus를 사용하면 index를 알수 있다. -->
+										<div class='gnr-item ${gnr.gnrId}'>
+											<input type='hidden' name='gnrList[${index.index}].gnrId' value="${gnr.gnrVO.gnrNm}"/> <!-- index 0부터 시작 -->
+											<span>${gnr.gnrVO.gnrNm}</span>
+											<button class="del-gnr-item-btn" data-gnrid="${gnr.gnrId}">X</button>
+										</div>
+									</c:forEach>
+								</div>
 							</div>
 						</div>
 						</div>
@@ -224,7 +232,19 @@
 							<label for="addDirectorBtn">감독</label>
 							<div>
 								<button id="addDirectorBtn" class="btn-primary">등록</button>
-								<div class="items"></div>
+								<div class="items">
+									<c:forEach items="${mvVO.pplList}" var="ppl" varStatus="index">
+										<c:if test="${ppl.mssn eq 'DRCTR'}">
+											<div class='mvppl-item ${ppl.mvPplId}'>
+												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
+												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
+												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<span>${ppl.mvPplVO.nm}</span>
+												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+											</div>
+										</c:if>
+									</c:forEach>
+								</div>
 							</div>
 						</div>
 						<div class="create-group">
@@ -232,7 +252,17 @@
 							<div>
 								<button id="addScripterBtn" class="btn-primary">등록</button>
 								<div class="items">
-									
+									<c:forEach items="${mvVO.pplList}" var="ppl" varStatus="index">
+										<c:if test="${ppl.mssn eq 'SCRPTR'}">
+											<div class='mvppl-item ${ppl.mvPplId}'>
+												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
+												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
+												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<span>${ppl.mvPplVO.nm}</span>
+												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+											</div>
+										</c:if>
+									</c:forEach>
 								</div>
 							</div>
 						</div>
@@ -241,7 +271,17 @@
 							<div>
 								<button id="addProducerBtn" class="btn-primary">등록</button>
 								<div class="items">
-									
+									<c:forEach items="${mvVO.pplList}" var="ppl" varStatus="index">
+										<c:if test="${ppl.mssn eq 'PRDCR'}">
+											<div class='mvppl-item ${ppl.mvPplId}'>
+												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
+												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
+												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<span>${ppl.mvPplVO.nm}</span>
+												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+											</div>
+										</c:if>
+									</c:forEach>
 								</div>
 							</div>
 						</div>
@@ -250,7 +290,17 @@
 							<div>
 								<button id="addMainActorBtn" class="btn-primary">등록</button>
 								<div class="items">
-									
+									<c:forEach items="${mvVO.pplList}" var="ppl" varStatus="index">
+										<c:if test="${ppl.mssn eq 'MNACTR'}">
+											<div class='mvppl-item ${ppl.mvPplId}'>
+												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
+												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
+												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<span>${ppl.mvPplVO.nm}</span>
+												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+											</div>
+										</c:if>
+									</c:forEach>
 								</div>
 							</div>
 						</div>
@@ -259,7 +309,17 @@
 							<div>
 								<button id="addSupportActorBtn" class="btn-primary">등록</button>
 								<div class="items">
-									
+									<c:forEach items="${mvVO.pplList}" var="ppl" varStatus="index">
+										<c:if test="${ppl.mssn eq 'SPRTACTR'}">
+											<div class='mvppl-item ${ppl.mvPplId}'>
+												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
+												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
+												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<span>${ppl.mvPplVO.nm}</span>
+												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+											</div>
+										</c:if>
+									</c:forEach>
 								</div>
 							</div>
 						</div>
@@ -267,7 +327,19 @@
 							<label for="addExtraBtn">기타</label>
 							<div>
 								<button id="addExtraBtn" class="btn-primary">등록</button>
-								<div class="items"></div>
+								<div class="items">
+									<c:forEach items="${mvVO.pplList}" var="ppl" varStatus="index">
+										<c:if test="${ppl.mssn eq 'EXTR'}">
+											<div class='mvppl-item ${ppl.mvPplId}'>
+												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
+												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
+												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<span>${ppl.mvPplVO.nm}</span>
+												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+											</div>
+										</c:if>
+									</c:forEach>
+								</div>
 							</div>
 						</div>
 					</form>

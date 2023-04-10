@@ -28,7 +28,7 @@
 		, SYSDATE
 		, #{mdfyr}
 		, NVL(#{useYn}, 'N') 
-		, 'N' );
+		, 'N' )
 		
 	</insert>
 	
