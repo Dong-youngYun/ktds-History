@@ -5,7 +5,18 @@
 <mapper namespace="MvGnr">
 	<insert id="createNewMvGnr"
 			parameterType="com.ktdsuniversity.admin.mvgnr.vo.MvGnrVO">
-		INSERT INTO MV_GNR
+		<!-- 기존 db에 있는 정보를 다시 삽입할때 무결성제약 없이 사용하기 위해 -->
+		 MERGE INTO MV_GNR
+		 USING DUAL
+		    ON (MV_ID = #{mvId} 
+		   AND GNR_ID = #{gnrId})
+		  WHEN MATCHED THEN
+		UPDATE 
+		   SET DEL_YN = 'N'
+		     , MDFY_DT = SYSDATE
+		     , MDFYR = #{mdfyr}
+		  WHEN NOT MATCHED THEN
+		INSERT
 		 (MV_ID
 		, GNR_ID
 		, CRT_DT

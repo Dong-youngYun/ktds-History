@@ -29,6 +29,10 @@
 		var len = gnrItems.find(".gnr-item").length;
 		var itemDiv = $("<div class='gnr-item " + message.gnrid + "'></div>");
 		
+		var added = $("<input type='hidden' name='gnrList["+len+"].added'/>"); // 장르위에 added라는 input이 하나 더 생긴다.
+		added.val("true");													   // 새로 가져온 장르는 자바 스크립트에서 생성되서 삭제되는 것이다. (addGnrFn)
+		itemDiv.append(added);											       // 버튼마다 할당된 이벤트가 다르다. (클래스 이름으로 구별) (서버와 jsp)
+		
 		var itemId = $("<input type='hidden' name='gnrList["+len+"].gnrId'/>");
 		itemId.val(message.gnrid);
 		itemDiv.append(itemId);
@@ -56,6 +60,10 @@
 		
 		var len = $("#create_form").find(".mvppl-item").length; // form으로 묶어서 리스트가 인덱스대로 나오게 한다. 폼이 없으면 index가 한 컬럼마다 0부터 시작한다.
 		var itemDiv = $("<div class='mvppl-item " + message.mvpplid + "'></div>");
+		
+		var added = $("<input type='hidden' name='pplList["+len+"].added' />");
+		added.val("true");
+		itemDiv.append(added);
 		
 		var itemId = $("<input type='hidden' name='pplList["+len+"].mvPplId' />");
 		itemId.val(message.mvpplid);
@@ -125,7 +133,7 @@
 	
 		$("#new_btn").click(function() {
 			var ajaxUtil = new AjaxUtil();
-			ajaxUtil.upload("#create_form", "${context}/api/mv/create", function(response) {
+			ajaxUtil.upload("#create_form", "${context}/api/mv/update", function(response) {
 				if (response.status == "200 OK") {
 					location.href = "${context}" + response.redirectURL;
 				}
@@ -142,6 +150,57 @@
 			$("#pstr").click();
 		});
 		
+		$(".del-gnr-item-btn").click(function() {
+			var parent = $(this).closest(".gnr-item");
+			parent.css("backgroundColor", "#F009");
+			
+			var index = $(this).data("index");
+			var deleted = $("<input type='hidden' name='gnrList["+index+"].deleted' />"); //서버에서 지울 대상이라고 판단.
+			deleted.val($(this).data("gnrid")); // value값 삭제
+			parent.append(deleted);
+			
+			$(this).remove(); // 삭제한걸 또 삭제 할 수 있어서 버튼을 지운다.
+		});
+		
+		$(".del-ppl-item-btn").click(function() {
+			var parent = $(this).closest(".mvppl-item");
+			parent.css("backgroundColor", "#F009");
+			
+			var index = $(this).data("index");
+			var deleted = $("<input type='hidden' name='pplList["+index+"].deleted' />");
+			deleted.val($(this).data("prdcprtcptnid"));
+			parent.append(deleted);
+			
+			// 역할명 편집 불가처리
+			parent.find("input[type=text]").attr("disabled", "disabled"); // input type이 hidden인걸 다 가져와서 disabled를 추가해라
+			
+			$(this).remove();
+		});
+		
+		$(".rspnsbltRolNm").keyup(function() {
+			var orgnName = $(this).data("orgn-name");
+			var nowName = $(this).val();
+			var parent = $(this).closest(".mvppl-item");
+			var index = $(this).data("index");
+			
+			//console.log(orgnName, nowName, orgnName = nowName);
+			if (orgnName == nowName) {
+				parent.find("input.mdfy").remove();
+			}
+			else {
+				var modifiedDom = parent.find("input.mdfy");
+				
+				if (modifiedDom.length == 0) {
+					var modified = $("<input type='hidden' class='mdfy' name='pplList["+index+"].modified' />");
+					modified.val(parent.find("button").data("prdcprtcptnid")); //undefined가 나올 수 도 있어서 이후 배열로 접근한다.
+					parent.append(modified);
+				}
+				
+				
+				// TODO input type=hidden name="pplList[index].modified" value=prdcPrtcptnId
+			}
+		});
+		
 	});
 	
 </script>
@@ -156,6 +215,7 @@
 				<div class="path">영화 > 영화관리 > 등록 </div>
 				<h1>영화 정보 등록</h1>
 					<form id="create_form" enctype="multipart/form-data">
+					<input type="hidden" name="mvId" value="${mvVO.mvId}" />
 					<div>
 						<div class="create-group">
 							<label for="pstr">포스터</label>
@@ -186,7 +246,7 @@
 							</select>
 						</div>
 						<div class="create-group">
-							<label for="scrnTm">상영시간</label>
+							<label for="scrnTm">상영시간 (분)</label>
 							<input type="number" id="scrnTm" name="scrnTm" value="${mvVO.scrnTm}" />
 						</div>
 						<div class="create-group">
@@ -219,9 +279,9 @@
 								<div class="items">
 									<c:forEach items="${mvVO.gnrList}" var="gnr" varStatus="index"> <!-- varStatus를 사용하면 index를 알수 있다. -->
 										<div class='gnr-item ${gnr.gnrId}'>
-											<input type='hidden' name='gnrList[${index.index}].gnrId' value="${gnr.gnrVO.gnrNm}"/> <!-- index 0부터 시작 -->
+											<input type='hidden' name='gnrList[${index.index}].gnrId' value="${gnr.gnrId}"/> <!-- index 0부터 시작 -->
 											<span>${gnr.gnrVO.gnrNm}</span>
-											<button class="del-gnr-item-btn" data-gnrid="${gnr.gnrId}">X</button>
+											<button class="del-gnr-item-btn" data-index="${index.index}" data-gnrid="${gnr.gnrId}">X</button> <!-- 자바스크립트에서 몇번 index인지 모르기 떄문에 데이터를 전달하기 위해 data-index 설정 -->
 										</div>
 									</c:forEach>
 								</div>
@@ -238,9 +298,14 @@
 											<div class='mvppl-item ${ppl.mvPplId}'>
 												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
 												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
-												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' 
+														placeholder='역할명' 
+														class="rspnsbltRolNm"
+														data-index="${index.index}" 
+														data-orgn-name="${ppl.rspnsbltRolNm}" 
+														value="${ppl.rspnsbltRolNm}" /> <!-- 몇번 index인지와 원본data를 알아내서 modify인지 확인 -->
 												<span>${ppl.mvPplVO.nm}</span>
-												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+												<button class="del-ppl-item-btn" data-index="${index.index}" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
 											</div>
 										</c:if>
 									</c:forEach>
@@ -257,9 +322,11 @@
 											<div class='mvppl-item ${ppl.mvPplId}'>
 												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
 												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
-												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' 
+														class="rspnsbltRolNm"
+														data-index="${index.index}" data-orgn-name="${ppl.rspnsbltRolNm}" value="${ppl.rspnsbltRolNm}" />
 												<span>${ppl.mvPplVO.nm}</span>
-												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+												<button class="del-ppl-item-btn" data-index="${index.index}" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
 											</div>
 										</c:if>
 									</c:forEach>
@@ -267,7 +334,7 @@
 							</div>
 						</div>
 						<div class="create-group">
-							<label for="addProducerBtn"s>연출</label>
+							<label for="addProducerBtn">연출</label>
 							<div>
 								<button id="addProducerBtn" class="btn-primary">등록</button>
 								<div class="items">
@@ -276,9 +343,10 @@
 											<div class='mvppl-item ${ppl.mvPplId}'>
 												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
 												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
-												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<input type='text' name='pplList[${index.index}].rspnsbltRolNm'  placeholder='역할명' 
+														data-index="${index.index}" data-orgn-name="${ppl.rspnsbltRolNm}" value="${ppl.rspnsbltRolNm}" />
 												<span>${ppl.mvPplVO.nm}</span>
-												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+												<button class="del-ppl-item-btn" data-index="${index.index}" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
 											</div>
 										</c:if>
 									</c:forEach>
@@ -295,9 +363,9 @@
 											<div class='mvppl-item ${ppl.mvPplId}'>
 												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
 												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
-												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' class="rspnsbltRolNm" data-index="${index.index}" data-orgn-name="${ppl.rspnsbltRolNm}" value="${ppl.rspnsbltRolNm}" />
 												<span>${ppl.mvPplVO.nm}</span>
-												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+												<button class="del-ppl-item-btn" data-index="${index.index}" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
 											</div>
 										</c:if>
 									</c:forEach>
@@ -314,9 +382,11 @@
 											<div class='mvppl-item ${ppl.mvPplId}'>
 												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
 												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
-												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' 
+														placeholder='역할명' class="rspnsbltRolNm" 
+														data-index="${index.index}" data-orgn-name="${ppl.rspnsbltRolNm}" value="${ppl.rspnsbltRolNm}" />
 												<span>${ppl.mvPplVO.nm}</span>
-												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+												<button class="del-ppl-item-btn" data-index="${index.index}" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
 											</div>
 										</c:if>
 									</c:forEach>
@@ -333,9 +403,15 @@
 											<div class='mvppl-item ${ppl.mvPplId}'>
 												<input type='hidden' name='pplList[${index.index}].mvPplId' value="${ppl.mvPplId}" />
 												<input type='hidden' name='pplList[${index.index}].mssn' placeholder='임무' value="${ppl.mssn}" />
-												<input type='text' name='pplList[${index.index}].rspnsbltRolNm' placeholder='역할명' value="${ppl.rspnsbltRolNm}" />
+												<input type='text' 
+														name='pplList[${index.index}].rspnsbltRolNm' 
+														placeholder='역할명' 
+														class="rspnsbltRolNm"
+														data-index="${index.index}" 
+														data-orgn-name="${ppl.rspnsbltRolNm}" 
+														value="${ppl.rspnsbltRolNm}" />
 												<span>${ppl.mvPplVO.nm}</span>
-												<button class="del-ppl-item-btn" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
+												<button class="del-ppl-item-btn" data-index="${index.index}" data-prdcprtcptnid="${ppl.prdcPrtcptnId}">X</button>
 											</div>
 										</c:if>
 									</c:forEach>

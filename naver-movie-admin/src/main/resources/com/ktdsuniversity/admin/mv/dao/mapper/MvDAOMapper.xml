@@ -168,6 +168,10 @@
 			ON V.MDFYR = V_MDFYR_MBR.MBR_ID
 		 WHERE V.MV_ID = #{_parameter}
 		   AND V.DEL_YN = 'N'
+		   AND G.DEL_YN = 'N'
+		   AND MP.DEL_YN = 'N'
+		   AND MG.DEL_YN = 'N'
+		   AND PRP.DEL_YN = 'N'
 	</select>
 	
 	<!-- <select id="readAllMv"

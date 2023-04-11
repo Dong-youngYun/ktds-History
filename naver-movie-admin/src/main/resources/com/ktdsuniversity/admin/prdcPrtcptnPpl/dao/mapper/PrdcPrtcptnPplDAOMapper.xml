@@ -40,6 +40,12 @@
 		
 	</update>
 	
+	<update id="updateOnePrdcPrtcptnPpl"
+			parameterType="com.ktdsuniversity.admin.prdcprtcptnppl.vo.PrdcPrtcptnPplVO">
+		UPDATE PRDC_PRTCPTN_PPL
+		   SET RSPNSBLT_ROL_NM = #{rspnsbltRolNm}
+		 WHERE PRDC_PRTCPTN_ID = #{prdcPrtcptnId}
+	</update>
 	
 	
 </mapper>
